@@ -1,0 +1,792 @@
+<!doctype html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>每日超市優惠</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet" />
+<style>
+button, [role="button"], select, summary, input:not([type="checkbox"], [type="radio"]) { min-height: 2.5rem;}
+
+:root {
+--bg: #f3f4f1;
+--surface: #ffffff;
+--ink: #1d2521;
+--muted: #5b675f;
+--line: #d9ded8;
+--accent: #0d6a4c;
+--accent-soft: #e3f0e9;
+--accent-ink: #ffffff;
+--urgent: #b02318;
+--urgent-bg: #fdecea;
+--warn: #8a5a00;
+--warn-bg: #fdf3dd;
+--chip: #edf0ec;
+--pre-bg: #171c19;
+--pre-ink: #e9ede9;
+--shadow: 0 1px 2px rgba(20, 30, 24,.06), 0 4px 14px rgba(20, 30, 24,.05);
+}
+@media (prefers-color-scheme: dark) {
+:root {
+--bg: #121614;
+--surface: #1c211e;
+--ink: #e9ede9;
+--muted: #9daba2;
+--line: #2e3530;
+--accent: #43b183;
+--accent-soft: #1e332a;
+--accent-ink: #0c1512;
+--urgent: #ff9d94;
+--urgent-bg: #3b2422;
+--warn: #f2c879;
+--warn-bg: #38300f;
+--chip: #262c28;
+--pre-bg: #0c0f0d;
+--pre-ink: #e9ede9;
+--shadow: 0 1px 2px rgba(0,0,0,.35), 0 4px 14px rgba(0,0,0,.3);
+}
+}
+
+* { box-sizing: border-box;}
+html { -webkit-text-size-adjust: 100%;}
+body {
+margin: 0;
+background: var(--bg);
+color: var(--ink);
+font-family: "Noto Sans TC", "PingFang HK", "Microsoft JhengHei", system-ui, sans-serif;
+font-size: 16px;
+line-height: 1.55;
+}
+.wrap { max-width: 1240px; margin: 0 auto; padding: 20px 16px 48px;}
+.page-title { font-size: clamp(1.6rem, 5vw, 2.3rem); margin: 0 0 14px; }
+
+/* ---------- Header ---------- */
+header.top { border-bottom: 3px solid var(--accent); padding-bottom: 14px;}
+.dateline { color: var(--muted); font-size:.85rem; font-weight: 500; letter-spacing:.02em; margin: 0 0 6px;}
+h1, .panel-title {
+font-family: "Noto Serif TC", "Noto Sans TC", serif;
+font-weight: 900; font-size: clamp(1.45rem, 4.5vw, 2.1rem);
+line-height: 1.25; margin: 0 0 10px;
+}
+.platform-line { margin: 0; font-size:.95rem;}
+.platform-line strong { color: var(--accent);}
+
+/* ---------- Date tabs (rolling 3 days) ---------- */
+.datetabs { margin: 0 0 16px; }
+.datetabs .tabrow { display: flex; flex-wrap: wrap; gap: 8px; }
+.datetab {
+font: inherit; font-weight: 700; font-size: .95rem; cursor: pointer;
+border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+border-radius: 10px; padding: 9px 18px; min-height: 2.5rem;
+}
+.datetab[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.datetab-note { color: var(--muted); font-size: .85rem; margin: 8px 0 0; }
+.day-panel.hidden-panel { display: none !important; }
+
+/* ---------- View switch ---------- */
+.viewbar {
+display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+margin: 18px 0 6px;
+}
+.seg { display: inline-flex; background: var(--chip); border: 1px solid var(--line); border-radius: 10px; padding: 4px; gap: 4px;}
+.seg button {
+border: 0; background: transparent; color: var(--ink);
+font: inherit; font-weight: 700; font-size:.92rem;
+padding: 6px 16px; border-radius: 7px; cursor: pointer; min-height: 2.5rem;
+}
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink);}
+.view-note { color: var(--muted); font-size:.85rem; margin: 0;}
+.text-actions { display: none; gap: 8px; margin-left: auto;}
+.text-actions button {
+font: inherit; font-size:.88rem; font-weight: 700; cursor: pointer;
+border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+border-radius: 8px; padding: 6px 14px;
+}
+.text-actions button:active { background: var(--accent-soft);}
+.copy-msg { font-size:.85rem; color: var(--accent); font-weight: 700; min-height: 1.2em;}
+
+/* ---------- Compare layout ---------- */
+.compare { display: block;}
+.compare.mode-html .pane-text { display: none; }
+.compare.mode-text .pane-html { display: none; }
+.pane-label {
+font-size:.8rem; font-weight: 900; letter-spacing:.08em;
+color: var(--muted); margin: 10px 0 8px; text-transform: none;
+}
+.compare.mode-html .pane-label, .compare.mode-text .pane-label { display: none; }
+
+/* ---------- Tips ---------- */
+.tips {
+background: var(--warn-bg); border: 1px solid var(--line);
+border-radius: 12px; padding: 14px 16px; margin: 14px 0 4px;
+}
+.tips h2 { font-size: 1rem; margin: 0 0 8px; color: var(--warn);}
+.tips ul { margin: 0; padding-left: 1.25em;}
+.tips li { margin: 4px 0; font-size:.93rem;}
+.tips li strong { font-weight: 700;}
+
+/* ---------- Filters ---------- */
+.filters { position: sticky; top: 0; z-index: 20; background: var(--bg); padding: 12px 0 10px;}
+.filters .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center;}
+.fbtn {
+font: inherit; font-size:.88rem; font-weight: 700; cursor: pointer;
+border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+border-radius: 999px; padding: 6px 14px;
+}
+.fbtn .cnt { color: var(--muted); font-weight: 500; margin-left: 4px;}
+.fbtn[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink);}
+.fbtn[aria-pressed="true"] .cnt { color: inherit; opacity:.8;}
+.fbtn.urgent-btn[aria-pressed="true"] { background: var(--urgent); border-color: var(--urgent); color: #fff;}
+.result-count { font-size:.88rem; color: var(--muted); margin: 10px 0 0; font-weight: 500;}
+.result-count strong { color: var(--ink);}
+
+/* ---------- Groups & cards ---------- */
+.group { margin-top: 22px;}
+.group-head { display: flex; align-items: baseline; gap: 10px; border-bottom: 2px solid var(--line); padding-bottom: 6px; margin-bottom: 12px;}
+.group-head h3 { font-size: 1.15rem; font-weight: 900; margin: 0;}
+.group-head .gcount { color: var(--muted); font-size:.85rem; font-weight: 500;}
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 12px;}
+@media (max-width: 420px) {.cards { grid-template-columns: minmax(0,1fr);}}
+.card {
+background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+padding: 13px 15px 11px; box-shadow: var(--shadow);
+}
+.card.is-urgent { border-color: var(--urgent);}
+.card-head { display: flex; gap: 9px; align-items: flex-start; margin-bottom: 8px;}
+.num {
+flex: 0 0 auto; min-width: 1.7em; height: 1.7em; padding: 0.3em;
+display: inline-flex; align-items: center; justify-content: center;
+background: var(--accent-soft); color: var(--accent);
+font-weight: 900; font-size:.85rem; border-radius: 7px; margin-top: 1px;
+}
+.item-name { font-size:.98rem; font-weight: 700; line-height: 1.4; margin: 0; flex: 1 1 auto; overflow-wrap: anywhere;}
+.badge {
+flex: 0 0 auto; font-size:.72rem; font-weight: 900; line-height: 1;
+padding: 5px 8px; border-radius: 999px; margin-top: 2px; white-space: nowrap;
+}
+.badge-today,.badge-last { background: var(--urgent-bg); color: var(--urgent);}
+.badge-soon { background: var(--warn-bg); color: var(--warn);}
+.card dl { margin: 0;}
+.card .row { display: flex; gap: 10px; padding: 5px 0; border-top: 1px dashed var(--line); font-size:.9rem;}
+.card .row:first-child { border-top: 0;}
+.card dt { flex: 0 0 4.4em; color: var(--muted); font-weight: 700; white-space: nowrap;}
+.card dd { margin: 0; flex: 1 1 auto; overflow-wrap: anywhere;}
+.card dd.price { font-weight: 700;}
+.card dd .avg { font-weight: 500; color: var(--muted);}
+.hidden { display: none!important;}
+.no-result { padding: 28px 0; color: var(--muted); text-align: center; font-weight: 500;}
+
+/* ---------- Text pane ---------- */
+.pre-scroll { overflow: auto; border-radius: 12px; border: 1px solid var(--line); background: var(--pre-bg);}
+pre.plain {
+margin: 0; padding: 16px;
+color: var(--pre-ink); background: var(--pre-bg);
+font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+font-size:.8rem; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere;
+}
+
+/* ---------- Footer ---------- */
+footer.notes {
+margin-top: 30px; border-top: 2px solid var(--line); padding-top: 14px;
+font-size:.9rem; color: var(--muted);
+}
+footer.notes h2 { font-size: 1rem; color: var(--ink); margin: 0 0 8px;}
+footer.notes p { margin: 6px 0;}
+@media (prefers-reduced-motion: reduce) { * { transition: none!important;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1 class="page-title">每日超市優惠</h1>
+<nav class="datetabs" aria-label="日期">
+<div class="tabrow" role="tablist">
+<button type="button" class="datetab" id="tab-20" role="tab" aria-selected="false" aria-controls="panel-20" data-day="20">11月20日（星期五）</button>
+<button type="button" class="datetab" id="tab-21" role="tab" aria-selected="false" aria-controls="panel-21" data-day="21">11月21日（星期六）</button>
+<button type="button" class="datetab" id="tab-22" role="tab" aria-selected="true" aria-controls="panel-22" data-day="22">11月22日（星期日）</button>
+</div>
+<p class="datetab-note">舊日子顯示當日發出嘅內容原樣。</p>
+</nav>
+<div class="day-panel" id="panel-22" role="tabpanel" aria-labelledby="tab-22">
+<header class="top">
+<p class="dateline">2026 年 11 月 22 日（星期日）</p>
+<h2 class="panel-title">11月22日（星期日）</h2>
+<p class="platform-line">搜查 10 個平台：HKTVmall、百佳、惠康／Market Place、萬寧、AEON、屈臣氏、DON DON DONKI、759 阿信屋、SOGO、city'super。10 個今日都有特別優惠。</p>
+</header>
+
+<div class="viewbar">
+<div class="seg" role="group" aria-label="版本切換">
+<button type="button" id="btnHtml22" aria-pressed="true">HTML</button>
+<button type="button" id="btnText22" aria-pressed="false">文字</button>
+</div>
+<div class="text-actions" id="textActions22">
+<button type="button" id="btnCopy22">複製文字</button>
+<button type="button" id="btnDl22">下載.txt</button>
+</div>
+<p class="view-note" id="viewNote22">兩個檢視內容相同，共 10 項。切去「文字」即可睇純文字。</p>
+<span class="copy-msg" id="copyMsg22" role="status"></span>
+</div>
+
+<div class="compare mode-html" id="compare22">
+<section class="pane pane-html" aria-label="HTML">
+<div class="tips">
+<h2>今日重點</h2>
+<ul>
+<li>SOGO 感謝祭今日最後一日：全店 2 倍積分。</li>
+<li>百佳快閃 3 天今日最後一日：金奇異果、水餃、香米、三文魚扒等。</li>
+<li>百佳新鮮檸檬 $1/個，今日最後一日。</li>
+<li>759 電子會員快閃 7 折，今日最後一日。</li>
+<li>HKTVmall 週末碼 Shoppick／Delivery，今日最後一日。</li>
+<li>惠康紙巾及廁紙快閃 85 折，今日最後一日。</li>
+<li>萬寧雪肌精快閃，今日最後一日。</li>
+<li>AEON 感謝日 95 折，至 11 月 23 日。</li>
+<li>city'super 聖誕饗宴 8 折，至 11 月 23 日。</li>
+</ul>
+</div>
+
+<div id="groups22">
+<section class="group"><div class="group-head"><h3>SOGO</h3><span class="gcount">第 1 項，共 1 項</span></div><div class="cards">
+<article class="card is-urgent"><div class="card-head"><span class="num">1</span><h4 class="item-name">SOGO｜感謝祭今日最後一日</h4><span class="badge badge-last">今日最後一日</span></div><dl>
+<div class="row"><dt>優惠</dt><dd class="price">SOGO Rewards 會員全店 2 倍積分；指定專櫃即日累積滿 $4,800 送精選美酒 1 支（銅鑼灣）或美食禮盒 1 份（啟德）；滙豐信用卡累積滿 $3,000 享額外 6% 獎賞錢回贈</dd></div>
+<div class="row"><dt>期間</dt><dd>11月20日至11月22日（今日最後一日）；滙豐回贈至 2027年1月3日</dd></div>
+<div class="row"><dt>條款</dt><dd>2 倍積分指定貨品除外；滿 $4,800 最多 2 張發票；禮品數量有限，送完即止</dd></div>
+</dl></article>
+</div></section>
+<section class="group"><div class="group-head"><h3>百佳</h3><span class="gcount">第 2–5 項，共 4 項</span></div><div class="cards">
+<article class="card is-urgent"><div class="card-head"><span class="num">2</span><h4 class="item-name">百佳｜快閃 3 天精選</h4><span class="badge badge-last">今日最後一日</span></div><dl>
+<div class="row"><dt>商品</dt><dd>Zespri 新西蘭珍寶金奇異果 8 個裝；灣仔碼頭水餃家庭裝 840 克；金鳳牌純正泰國頂級香米 5 公斤；SELECT 佳之選急凍挪威三文魚扒 2 塊裝；出前一丁北海道小麥粉即食麵 5 包裝／農心薯仔麵 4 包裝；史雲生極鮮清雞湯 1 公升 3 盒裝</dd></div>
+<div class="row"><dt>優惠價</dt><dd class="price">金奇異果 $59/8 個（參考價：未能核實）；水餃 $51（參考價：未能核實）；香米 $79.9（參考價：未能核實）；三文魚扒 $80/2 包（參考價：未能核實）；即食麵 $38.9/2 袋（參考價：未能核實）；清雞湯 $30（參考價：未能核實）</dd></div>
+<div class="row"><dt>2 件比較</dt><dd>未能核實（未核實三文魚扒及即食麵單件價及同款參考價）</dd></div>
+<div class="row"><dt>期間</dt><dd>11月20日至11月22日（今日最後一日）</dd></div>
+<div class="row"><dt>條款</dt><dd>適用於大部分百佳、FUSION、TASTE、INTERNATIONAL 及 PNS 網購；不適用於百佳快閃特賣場及 TASTE x FRESH；每張發票計算；數量有限，售完即止</dd></div>
+</dl></article>
+<article class="card is-urgent"><div class="card-head"><span class="num">3</span><h4 class="item-name">百佳｜新鮮檸檬 $1/個</h4><span class="badge badge-last">今日最後一日</span></div><dl>
+<div class="row"><dt>優惠價</dt><dd class="price">$1/個（參考價：未能核實）</dd></div>
+<div class="row"><dt>期間</dt><dd>11月20日至11月22日（今日最後一日）</dd></div>
+<div class="row"><dt>條款</dt><dd>只限門市；適用於大部分百佳、FUSION、TASTE 及 INTERNATIONAL；不適用於 PNS 網購及 TASTE x FRESH；每張發票計算；數量有限，售完即止</dd></div>
+</dl></article>
+<article class="card"><div class="card-head"><span class="num">4</span><h4 class="item-name">百佳｜激筍換購</h4></div><dl>
+<div class="row"><dt>商品</dt><dd>淳·茶舍無糖茶 250 毫升 6 包裝 1 排；唯潔雅極致棉柔抽取式面紙 5 包裝 2 排；袋裝牛油果 6 個裝 1 袋；長城牌火腿豬肉 340 克 2 罐</dd></div>
+<div class="row"><dt>優惠</dt><dd class="price">買任何產品滿 $100，加 $10 換茶 1 排；加 $26 換面紙 2 排；加 $32 換牛油果 1 袋；加 $38 換火腿豬肉 2 罐</dd></div>
+<div class="row"><dt>期間</dt><dd>11月20日至11月26日</dd></div>
+<div class="row"><dt>條款</dt><dd>以每張發票計算；初生嬰兒奶粉、贈品及換購品除外；不適用於百佳快閃特賣場；數量有限，換完即止</dd></div>
+</dl></article>
+<article class="card"><div class="card-head"><span class="num">5</span><h4 class="item-name">百佳｜網購優惠碼</h4></div><dl>
+<div class="row"><dt>商品</dt><dd>百佳網購送貨、落佳拎及快趣送訂單</dd></div>
+<div class="row"><dt>優惠</dt><dd class="price">碼 NOVHD11 滿 $600 享 92 折（最高減 $100）；碼 NOVFREE11 滿 $350 免運費；碼 NOVCNC11 落佳拎滿 $250 減 $20；碼 NOVHDE11 快趣送滿 $250 減 $20；易賞錢 App 領門市電子優惠券</dd></div>
+<div class="row"><dt>期間</dt><dd>11月1日至11月30日</dd></div>
+<div class="row"><dt>條款</dt><dd>門市券：買滿 $120 包 1 件佳之選減 $10，買滿 $200 減 $12；每單限用 1 個網購碼</dd></div>
+</dl></article>
+</div></section>
+<section class="group"><div class="group-head"><h3>惠康</h3><span class="gcount">第 6–7 項，共 2 項</span></div><div class="cards">
+<article class="card is-urgent"><div class="card-head"><span class="num">6</span><h4 class="item-name">惠康｜紙巾及廁紙快閃 85 折</h4><span class="badge badge-last">今日最後一日</span></div><dl>
+<div class="row"><dt>商品</dt><dd>惠康網店紙巾及廁紙，包括倩絲迷你紙手巾 18 包裝及得寶印花 3 層衛生紙 10 卷裝</dd></div>
+<div class="row"><dt>優惠價</dt><dd class="price">紙巾及廁紙滿 $188 享 85 折；倩絲紙手巾頭 3 件 $25，折實 $21.3/3 件（參考價：未能核實）；得寶衛生紙折實 $56.1/2 袋（參考價：未能核實）</dd></div>
+<div class="row"><dt>期間</dt><dd>11月20日至11月22日（今日最後一日）</dd></div>
+<div class="row"><dt>條款</dt><dd>只限惠康網店；精選產品只限頭 3 件享特價；數量有限，售完即止</dd></div>
+</dl></article>
+<article class="card"><div class="card-head"><span class="num">7</span><h4 class="item-name">惠康｜堅著數及雪糕買 5 件 8 折</h4></div><dl>
+<div class="row"><dt>商品</dt><dd>全線佳能／高樂氏產品；道地 6 包裝茶類飲品 6 x 250 毫升；指定單件裝雪糕或雪條，包括雀巢、維記、阿波羅、Binggrae、樂天、森永、Seoju 及阿奇儂</dd></div>
+<div class="row"><dt>優惠</dt><dd class="price">買佳能／高樂氏滿 $138 送總值 $128 禮品；買 4 排道地茶類飲品送總值 $52 禮品；雪糕雪條買 5 件或以上享 8 折</dd></div>
+<div class="row"><dt>期間</dt><dd>11月20日至11月26日</dd></div>
+<div class="row"><dt>條款</dt><dd>只限門市；日本大山產品、新港城阿波羅櫃位產品及換購品或贈品不適用於雪糕優惠；部分貨品只限指定分店；禮品數量有限，送完即止</dd></div>
+</dl></article>
+</div></section>
+<section class="group"><div class="group-head"><h3>萬寧</h3><span class="gcount">第 8 項，共 1 項</span></div><div class="cards">
+<article class="card"><div class="card-head"><span class="num">8</span><h4 class="item-name">萬寧｜買 1 送 1、換購及雪肌精快閃</h4></div><dl>
+<div class="row"><dt>商品</dt><dd>精選護舒寶及沐浴產品；精選頭髮護理產品；御漢堂川貝枇杷／金桔陳皮爽喉軟糖 37.5 克；麗仕植萃香氛抑菌洗手液（櫻花香）400 克；UC1000 維他命飲料檸檬味 140 毫升 3 支裝；雪肌精護膚產品</dd></div>
+<div class="row"><dt>優惠</dt><dd class="price">精選護舒寶及沐浴產品買 1 送 1；精選頭髮護理產品買第 2 件半價；加 $10 換軟糖 1 件；加 $15 換洗手液 1 件；加 $15.9 換維他命飲料 1 件；11月20日至22日屯門市廣場雪肌精快閃：免費試用裝、購物禮贈及限定優惠價；AlipayHK 滿 $500 減 $50；網店新會員碼 JOINUS45 滿 $388 減 $45</dd></div>
+<div class="row"><dt>2 件比較</dt><dd>未能核實（未核實買 1 送 1 及第 2 件半價產品單價及同款參考價）</dd></div>
+<div class="row"><dt>期間</dt><dd>11月20日至11月26日；雪肌精快閃 11月20日至11月22日（今日最後一日）；AlipayHK 及 JOINUS45 至 11月30日</dd></div>
+<div class="row"><dt>條款</dt><dd>買 1 送 1 及第 2 件半價以 2 件計，價錢較低 1 件免費或半價；贈品每發票計，送完即止；部分分店不適用</dd></div>
+</dl></article>
+</div></section>
+<section class="group"><div class="group-head"><h3>759 阿信屋</h3><span class="gcount">第 9 項，共 1 項</span></div><div class="cards">
+<article class="card is-urgent"><div class="card-head"><span class="num">9</span><h4 class="item-name">759 阿信屋｜電子會員快閃 7 折</h4><span class="badge badge-last">今日最後一日</span></div><dl>
+<div class="row"><dt>商品</dt><dd>759 阿信屋分店貨品</dd></div>
+<div class="row"><dt>優惠</dt><dd class="price">電子會員折實滿 $100 享全單 7 折；PayMe 掃碼領 $4 折扣券，店內購物折實滿 $100 可用</dd></div>
+<div class="row"><dt>期間</dt><dd>電子會員快閃 11月19日至11月22日（今日最後一日）；PayMe 券至 12月31日</dd></div>
+<div class="row"><dt>條款</dt><dd>7 折須出示 759 Online App 內電子會員二維碼，只限分店；PayMe 券須先領券</dd></div>
+</dl></article>
+</div></section>
+<section class="group"><div class="group-head"><h3>其他</h3><span class="gcount">第 10 項，共 1 項</span></div><div class="cards">
+<article class="card"><div class="card-head"><span class="num">10</span><h4 class="item-name">其他｜HKTVmall 週末碼；AEON 感謝日；DONKI 玩具節；city'super 饗宴；屈臣氏黑五</h4></div><dl>
+<div class="row"><dt>商品</dt><dd>HKTVmall 指定超市貨品及新客首單；AEON 門市、Living Plaza 及 Daiso Japan 貨品；DON DON DONKI 指定玩具公仔；city'super 聖誕饗宴；屈臣氏網店精選產品</dd></div>
+<div class="row"><dt>優惠</dt><dd class="price">HKTVmall 碼 Shoppick 門市自取滿 $99 享 85 折或 95 折，碼 Delivery 送貨滿 $699 享 85 折或 95 折（視乎專區）；馬來西亞館碼 MYSAVE50 滿 $350 減 $50；新客碼 2026NOV50 滿 $200 減 $50；AEON 感謝日會員及指定信用卡享照價 95 折，Living Plaza 及 Daiso Japan 買 4 送 1，Black Friday 精選貨品半價，網店碼 ACNOV49 滿 $599 減 $49、ACNOV99 滿 $999 減 $99、ACNOV219 滿 $1,999 減 $219；DONKI 玩具節指定玩具公仔買 2 件 88 折，安信 EarnMORE／WeWa 卡單筆滿 $300 回 $30；city'super 聖誕饗宴預訂享 8 折；屈臣氏黑五碼 BLACK5 滿 $538 送贈品，碼 DEAL950 滿 $950 送贈品</dd></div>
+<div class="row"><dt>2 件比較</dt><dd>未能核實（未核實指定玩具單價及同款參考價）</dd></div>
+<div class="row"><dt>期間</dt><dd>Shoppick／Delivery 至 11月22日（今日最後一日）；MYSAVE50 至 2027年1月31日；2026NOV50 新客首單；AEON 感謝日及買 4 送 1 至 11月23日；Black Friday 至 12月6日；網店碼至 11月27日；DONKI 玩具節至 11月30日；安信回贈至 2027年2月28日；city'super 饗宴 8 折至 11月23日；屈臣氏黑五碼至 12月3日</dd></div>
+<div class="row"><dt>條款</dt><dd>HKTVmall 只適用指定專區貨品，每次付款只可用 1 個碼；新客碼每帳戶限用 1 次；AEON 感謝日 95 折不適用於 AEON BETA 會員及部分貨品；網店碼只適用於網上超市貨品，每單限用 1 個碼；DONKI 玩具節不適用於 Pokémon 及 ONE PIECE 卡牌、Nintendo Switch、聖誕主題商品、Sanrio 螃蟹系列、公價及清貨；安信須先在 OmyCard App 登記，每人全期最高回 $60；屈臣氏黑五碼只限網店及易賞錢會員，每單限用 1 個碼，贈品隨機，送完即止</dd></div>
+</dl></article>
+</div></section>
+</div>
+
+<footer class="notes">
+<p>價錢以門市／網店當日為準。數量有限，售完即止。</p>
+</footer>
+</section>
+
+<section class="pane pane-text" aria-label="文字">
+<div class="pre-scroll"><pre class="plain" id="plainText22">11月22日（星期日）
+
+搜查 10 個平台：HKTVmall、百佳、惠康／Market Place、萬寧、AEON、屈臣氏、DON DON DONKI、759 阿信屋、SOGO、city'super。10 個今日都有特別優惠。
+
+今日重點：
+- SOGO 感謝祭今日最後一日：全店 2 倍積分。
+- 百佳快閃 3 天今日最後一日：金奇異果、水餃、香米、三文魚扒等。
+- 百佳新鮮檸檬 $1/個，今日最後一日。
+- 759 電子會員快閃 7 折，今日最後一日。
+- HKTVmall 週末碼 Shoppick／Delivery，今日最後一日。
+- 惠康紙巾及廁紙快閃 85 折，今日最後一日。
+- 萬寧雪肌精快閃，今日最後一日。
+- AEON 感謝日 95 折，至 11 月 23 日。
+- city'super 聖誕饗宴 8 折，至 11 月 23 日。
+
+1. SOGO｜感謝祭今日最後一日。優惠：SOGO Rewards 會員全店 2 倍積分；指定專櫃即日累積滿 $4,800 送精選美酒 1 支（銅鑼灣）或美食禮盒 1 份（啟德）；滙豐信用卡累積滿 $3,000 享額外 6% 獎賞錢回贈。期間：11月20日至11月22日（今日最後一日）；滙豐回贈至 2027年1月3日。條款：2 倍積分指定貨品除外；滿 $4,800 最多 2 張發票；禮品數量有限，送完即止。
+2. 百佳｜快閃 3 天精選。商品：Zespri 新西蘭珍寶金奇異果 8 個裝；灣仔碼頭水餃家庭裝 840 克；金鳳牌純正泰國頂級香米 5 公斤；SELECT 佳之選急凍挪威三文魚扒 2 塊裝；出前一丁北海道小麥粉即食麵 5 包裝／農心薯仔麵 4 包裝；史雲生極鮮清雞湯 1 公升 3 盒裝。優惠價：金奇異果 $59/8 個（參考價：未能核實）；水餃 $51（參考價：未能核實）；香米 $79.9（參考價：未能核實）；三文魚扒 $80/2 包（參考價：未能核實）；即食麵 $38.9/2 袋（參考價：未能核實）；清雞湯 $30（參考價：未能核實）。2 件比較：未能核實（未核實三文魚扒及即食麵單件價及同款參考價）。期間：11月20日至11月22日（今日最後一日）。條款：適用於大部分百佳、FUSION、TASTE、INTERNATIONAL 及 PNS 網購；不適用於百佳快閃特賣場及 TASTE x FRESH；每張發票計算；數量有限，售完即止。
+3. 百佳｜新鮮檸檬 $1/個。優惠價：$1/個（參考價：未能核實）。期間：11月20日至11月22日（今日最後一日）。條款：只限門市；適用於大部分百佳、FUSION、TASTE 及 INTERNATIONAL；不適用於 PNS 網購及 TASTE x FRESH；每張發票計算；數量有限，售完即止。
+4. 百佳｜激筍換購。商品：淳·茶舍無糖茶 250 毫升 6 包裝 1 排；唯潔雅極致棉柔抽取式面紙 5 包裝 2 排；袋裝牛油果 6 個裝 1 袋；長城牌火腿豬肉 340 克 2 罐。優惠：買任何產品滿 $100，加 $10 換茶 1 排；加 $26 換面紙 2 排；加 $32 換牛油果 1 袋；加 $38 換火腿豬肉 2 罐。期間：11月20日至11月26日。條款：以每張發票計算；初生嬰兒奶粉、贈品及換購品除外；不適用於百佳快閃特賣場；數量有限，換完即止。
+5. 百佳｜網購優惠碼。商品：百佳網購送貨、落佳拎及快趣送訂單。優惠：碼 NOVHD11 滿 $600 享 92 折（最高減 $100）；碼 NOVFREE11 滿 $350 免運費；碼 NOVCNC11 落佳拎滿 $250 減 $20；碼 NOVHDE11 快趣送滿 $250 減 $20；易賞錢 App 領門市電子優惠券。期間：11月1日至11月30日。條款：門市券：買滿 $120 包 1 件佳之選減 $10，買滿 $200 減 $12；每單限用 1 個網購碼。
+6. 惠康｜紙巾及廁紙快閃 85 折。商品：惠康網店紙巾及廁紙，包括倩絲迷你紙手巾 18 包裝及得寶印花 3 層衛生紙 10 卷裝。優惠價：紙巾及廁紙滿 $188 享 85 折；倩絲紙手巾頭 3 件 $25，折實 $21.3/3 件（參考價：未能核實）；得寶衛生紙折實 $56.1/2 袋（參考價：未能核實）。期間：11月20日至11月22日（今日最後一日）。條款：只限惠康網店；精選產品只限頭 3 件享特價；數量有限，售完即止。
+7. 惠康｜堅著數及雪糕買 5 件 8 折。商品：全線佳能／高樂氏產品；道地 6 包裝茶類飲品 6 x 250 毫升；指定單件裝雪糕或雪條，包括雀巢、維記、阿波羅、Binggrae、樂天、森永、Seoju 及阿奇儂。優惠：買佳能／高樂氏滿 $138 送總值 $128 禮品；買 4 排道地茶類飲品送總值 $52 禮品；雪糕雪條買 5 件或以上享 8 折。期間：11月20日至11月26日。條款：只限門市；日本大山產品、新港城阿波羅櫃位產品及換購品或贈品不適用於雪糕優惠；部分貨品只限指定分店；禮品數量有限，送完即止。
+8. 萬寧｜買 1 送 1、換購及雪肌精快閃。商品：精選護舒寶及沐浴產品；精選頭髮護理產品；御漢堂川貝枇杷／金桔陳皮爽喉軟糖 37.5 克；麗仕植萃香氛抑菌洗手液（櫻花香）400 克；UC1000 維他命飲料檸檬味 140 毫升 3 支裝；雪肌精護膚產品。優惠：精選護舒寶及沐浴產品買 1 送 1；精選頭髮護理產品買第 2 件半價；加 $10 換軟糖 1 件；加 $15 換洗手液 1 件；加 $15.9 換維他命飲料 1 件；11月20日至22日屯門市廣場雪肌精快閃：免費試用裝、購物禮贈及限定優惠價；AlipayHK 滿 $500 減 $50；網店新會員碼 JOINUS45 滿 $388 減 $45。2 件比較：未能核實（未核實買 1 送 1 及第 2 件半價產品單價及同款參考價）。期間：11月20日至11月26日；雪肌精快閃 11月20日至11月22日（今日最後一日）；AlipayHK 及 JOINUS45 至 11月30日。條款：買 1 送 1 及第 2 件半價以 2 件計，價錢較低 1 件免費或半價；贈品每發票計，送完即止；部分分店不適用。
+9. 759 阿信屋｜電子會員快閃 7 折。商品：759 阿信屋分店貨品。優惠：電子會員折實滿 $100 享全單 7 折；PayMe 掃碼領 $4 折扣券，店內購物折實滿 $100 可用。期間：電子會員快閃 11月19日至11月22日（今日最後一日）；PayMe 券至 12月31日。條款：7 折須出示 759 Online App 內電子會員二維碼，只限分店；PayMe 券須先領券。
+10. 其他｜HKTVmall 週末碼；AEON 感謝日；DONKI 玩具節；city'super 饗宴；屈臣氏黑五。商品：HKTVmall 指定超市貨品及新客首單；AEON 門市、Living Plaza 及 Daiso Japan 貨品；DON DON DONKI 指定玩具公仔；city'super 聖誕饗宴；屈臣氏網店精選產品。優惠：HKTVmall 碼 Shoppick 門市自取滿 $99 享 85 折或 95 折，碼 Delivery 送貨滿 $699 享 85 折或 95 折（視乎專區）；馬來西亞館碼 MYSAVE50 滿 $350 減 $50；新客碼 2026NOV50 滿 $200 減 $50；AEON 感謝日會員及指定信用卡享照價 95 折，Living Plaza 及 Daiso Japan 買 4 送 1，Black Friday 精選貨品半價，網店碼 ACNOV49 滿 $599 減 $49、ACNOV99 滿 $999 減 $99、ACNOV219 滿 $1,999 減 $219；DONKI 玩具節指定玩具公仔買 2 件 88 折，安信 EarnMORE／WeWa 卡單筆滿 $300 回 $30；city'super 聖誕饗宴預訂享 8 折；屈臣氏黑五碼 BLACK5 滿 $538 送贈品，碼 DEAL950 滿 $950 送贈品。2 件比較：未能核實（未核實指定玩具單價及同款參考價）。期間：Shoppick／Delivery 至 11月22日（今日最後一日）；MYSAVE50 至 2027年1月31日；2026NOV50 新客首單；AEON 感謝日及買 4 送 1 至 11月23日；Black Friday 至 12月6日；網店碼至 11月27日；DONKI 玩具節至 11月30日；安信回贈至 2027年2月28日；city'super 饗宴 8 折至 11月23日；屈臣氏黑五碼至 12月3日。條款：HKTVmall 只適用指定專區貨品，每次付款只可用 1 個碼；新客碼每帳戶限用 1 次；AEON 感謝日 95 折不適用於 AEON BETA 會員及部分貨品；網店碼只適用於網上超市貨品，每單限用 1 個碼；DONKI 玩具節不適用於 Pokémon 及 ONE PIECE 卡牌、Nintendo Switch、聖誕主題商品、Sanrio 螃蟹系列、公價及清貨；安信須先在 OmyCard App 登記，每人全期最高回 $60；屈臣氏黑五碼只限網店及易賞錢會員，每單限用 1 個碼，贈品隨機，送完即止。
+
+價錢以門市／網店當日為準。數量有限，售完即止。</pre></div>
+</section>
+</div>
+</div><!-- /panel-22 -->
+
+<div class="day-panel hidden-panel" id="panel-21" role="tabpanel" aria-labelledby="tab-21">
+<header class="top">
+<p class="dateline">2026 年 11 月 21 日（星期六）</p>
+<h2 class="panel-title">11月21日（星期六）</h2>
+<p class="platform-line">搜查 10 個平台：HKTVmall、百佳、惠康／Market Place、萬寧、AEON、屈臣氏、DON DON DONKI、759 阿信屋、SOGO、city'super。10 個今日都有特別優惠。</p>
+</header>
+
+<div class="viewbar">
+<div class="seg" role="group" aria-label="版本切換">
+<button type="button" id="btnHtml21" aria-pressed="true">HTML</button>
+<button type="button" id="btnText21" aria-pressed="false">文字</button>
+</div>
+<div class="text-actions" id="textActions21">
+<button type="button" id="btnCopy21">複製文字</button>
+<button type="button" id="btnDl21">下載.txt</button>
+</div>
+<p class="view-note" id="viewNote21">兩個檢視內容相同，共 10 項。切去「文字」即可睇純文字。</p>
+<span class="copy-msg" id="copyMsg21" role="status"></span>
+</div>
+
+<div class="compare mode-html" id="compare21">
+<section class="pane pane-html" aria-label="HTML">
+<div class="tips">
+<h2>今日重點</h2>
+<ul>
+<li>屈臣氏全場無門檻 88 折只限今日：門市任何消費加送 $100 優惠券。</li>
+<li>759 週六限定：樂悠咭買麵包每件減 $2，只限今日。</li>
+<li>百佳新鮮檸檬 $1/個，至 11 月 22 日。</li>
+<li>759 電子會員快閃：滿 $100 享全單 7 折，至 11 月 22 日。</li>
+<li>萬寧雪肌精快閃：11 月 20 日至 22 日。</li>
+<li>SOGO 感謝祭最後 2 日：全店 2 倍積分。</li>
+<li>AEON 感謝日：會員及指定信用卡享照價 95 折，至 11 月 23 日。</li>
+<li>惠康雪糕雪條買 5 件享 8 折，至 11 月 26 日。</li>
+</ul>
+</div>
+
+<div id="groups21">
+<section class="group"><div class="group-head"><h3>屈臣氏</h3><span class="gcount">第 1 項，共 1 項</span></div><div class="cards">
+<article class="card is-urgent"><div class="card-head"><span class="num">1</span><h4 class="item-name">屈臣氏｜11月21日全場無門檻 88 折及送券</h4><span class="badge badge-today">只限今日</span></div><dl>
+<div class="row"><dt>優惠</dt><dd class="price">易賞錢會員全場無門檻 88 折（網店碼 12OFF）；門市任何消費加送 $100 優惠券；護膚／美妝滿 $150 送 $50 券；健康產品滿 $150 送 $10 券；AlipayHK 滿 $200 減 $20</dd></div>
+<div class="row"><dt>期間</dt><dd>11月21日（只限今日）</dd></div>
+<div class="row"><dt>條款</dt><dd>只限易賞錢會員；88 折期間現金優惠券暫停使用；禮券、初生嬰兒奶粉及指定產品除外；$100 券數量有限，送完即止</dd></div>
+</dl></article>
+</div></section>
+
+<section class="group"><div class="group-head"><h3>百佳</h3><span class="gcount">第 2–5 項，共 4 項</span></div><div class="cards">
+<article class="card"><div class="card-head"><span class="num">2</span><h4 class="item-name">百佳｜新鮮檸檬 $1/個</h4></div><dl>
+<div class="row"><dt>優惠價</dt><dd class="price">$1/個（參考價：未能核實）</dd></div>
+<div class="row"><dt>期間</dt><dd>11月20日至11月22日</dd></div>
+<div class="row"><dt>條款</dt><dd>只限門市；適用於大部分百佳、FUSION、TASTE 及 INTERNATIONAL；不適用於 PNS 網購及 TASTE x FRESH；每張發票計算；數量有限，售完即止</dd></div>
+</dl></article>
+<article class="card"><div class="card-head"><span class="num">3</span><h4 class="item-name">百佳｜快閃特賣場精選</h4></div><dl>
+<div class="row"><dt>商品</dt><dd>百佳快閃特賣場：不倒翁黑椒牛骨拉麵碗、皇冠咖啡曲奇、Ariel 抗菌洗衣液補充裝、Castle 5 合 1 抗菌洗衣珠、華園香港手信派對零食包、Calbee Jagabee 薯條三重裝</dd></div>
+<div class="row"><dt>優惠價</dt><dd class="price">拉麵碗 $2（參考價：未能核實）；曲奇 $6（參考價：未能核實）；洗衣液 $37（參考價：未能核實）；洗衣珠 $42（參考價：未能核實）；零食包 $10（參考價：未能核實）；薯條 $23（參考價：未能核實）</dd></div>
+<div class="row"><dt>期間</dt><dd>11月20日起（結束日未核實）</dd></div>
+<div class="row"><dt>條款</dt><dd>只限天水圍 +WOO 嘉湖 1 期 2 樓 220 號舖；營業時間 08:00 至 20:00；數量有限，售完即止</dd></div>
+</dl></article>
+<article class="card"><div class="card-head"><span class="num">4</span><h4 class="item-name">百佳｜網購優惠碼</h4></div><dl>
+<div class="row"><dt>商品</dt><dd>百佳網購送貨及落佳拎訂單</dd></div>
+<div class="row"><dt>優惠</dt><dd class="price">碼 NOVHD11 滿 $600 享 92 折（最高減 $100）；碼 NOVFREE11 滿 $350 免運費；碼 NOVCNC11 落佳拎滿 $250 減 $20；易賞錢 App 領門市電子優惠券</dd></div>
+<div class="row"><dt>期間</dt><dd>11月1日至11月30日</dd></div>
+<div class="row"><dt>條款</dt><dd>門市券：買滿 $120 包 1 件佳之選減 $10，買滿 $200 減 $12；每單限用 1 個網購碼</dd></div>
+</dl></article>
+<article class="card"><div class="card-head"><span class="num">5</span><h4 class="item-name">百佳｜飲品滿額送清雞湯及蠔油</h4></div><dl>
+<div class="row"><dt>商品</dt><dd>屈臣氏蒸餾水品牌常溫或冷凍飲品</dd></div>
+<div class="row"><dt>優惠</dt><dd class="price">買滿 $65 送屈臣氏礦物質有氣水 6 罐裝、史雲生清雞湯（澳洲版）1 公升及淘大特級蠔油 555 克；屈臣氏蒸餾水旗艦店滿 $180 送電解質運動飲品 500 毫升 2 件；滿 $220 加送 IF 茉莉香米味椰青水 350 毫升 2 件；買 WAITROSE 產品滿 $100 送 $15 電子優惠券；新客首張 PNS App 訂單滿 $399 碼 PNSAPP 享 9 折及免運費</dd></div>
+<div class="row"><dt>期間</dt><dd>至11月26日</dd></div>
+<div class="row"><dt>條款</dt><dd>只限 PNS 網購；贈品數量有限，送完即止</dd></div>
+</dl></article>
+</div></section>
+
+<section class="group"><div class="group-head"><h3>惠康</h3><span class="gcount">第 6 項，共 1 項</span></div><div class="cards">
+<article class="card"><div class="card-head"><span class="num">6</span><h4 class="item-name">惠康｜雪糕雪條買 5 件享 8 折</h4></div><dl>
+<div class="row"><dt>商品</dt><dd>指定單件裝雪糕或雪條，包括雀巢、維記、阿波羅、Binggrae、樂天、森永、Seoju 及阿奇儂</dd></div>
+<div class="row"><dt>優惠</dt><dd class="price">買 5 件或以上享 8 折</dd></div>
+<div class="row"><dt>期間</dt><dd>11月20日至11月26日</dd></div>
+<div class="row"><dt>條款</dt><dd>只限門市；日本大山產品、新港城阿波羅櫃位產品及換購品或贈品不適用；部分貨品只限指定分店</dd></div>
+</dl></article>
+</div></section>
+
+<section class="group"><div class="group-head"><h3>AEON</h3><span class="gcount">第 7 項，共 1 項</span></div><div class="cards">
+<article class="card"><div class="card-head"><span class="num">7</span><h4 class="item-name">AEON｜感謝日 95 折及網店碼</h4></div><dl>
+<div class="row"><dt>商品</dt><dd>AEON 門市、Living Plaza 及 Daiso Japan 貨品；AEONCITY 網上超市貨品</dd></div>
+<div class="row"><dt>優惠</dt><dd class="price">11月20日至23日感謝日：會員卡或指定 AEON 信用卡以指定付款方式購物享照價 95 折；Living Plaza 及 Daiso Japan 買 4 送 1；Black Friday 精選貨品半價、杯裝啫喱 3 件 $12、精選貼紙 $6；網店碼 ACNOV49 滿 $599 減 $49、ACNOV99 滿 $999 減 $99、ACNOV219 滿 $1,999 減 $219</dd></div>
+<div class="row"><dt>期間</dt><dd>感謝日 11月20日至11月23日；買 4 送 1 至 11月23日；Black Friday 至 12月6日；網店碼 11月1日至11月27日</dd></div>
+<div class="row"><dt>條款</dt><dd>感謝日 95 折不適用於 AEON BETA 會員及部分貨品；網店碼只適用於網上超市貨品，每單限用 1 個碼</dd></div>
+</dl></article>
+</div></section>
+
+<section class="group"><div class="group-head"><h3>759 阿信屋</h3><span class="gcount">第 8 項，共 1 項</span></div><div class="cards">
+<article class="card"><div class="card-head"><span class="num">8</span><h4 class="item-name">759 阿信屋｜電子會員快閃 7 折及週六麵包減 $2</h4></div><dl>
+<div class="row"><dt>商品</dt><dd>759 阿信屋分店貨品；759 麵包工房系列產品</dd></div>
+<div class="row"><dt>優惠</dt><dd class="price">電子會員折實滿 $100 享全單 7 折；逢星期六憑樂悠咭買麵包工房產品每件減 $2</dd></div>
+<div class="row"><dt>期間</dt><dd>電子會員快閃 11月19日至11月22日；麵包減 $2 只限 11月21日星期六</dd></div>
+<div class="row"><dt>條款</dt><dd>7 折須出示 759 Online App 內電子會員二維碼，只限分店；麵包減 $2 須以樂悠咭付款，只限指定分店</dd></div>
+</dl></article>
+</div></section>
+
+<section class="group"><div class="group-head"><h3>萬寧</h3><span class="gcount">第 9 項，共 1 項</span></div><div class="cards">
+<article class="card"><div class="card-head"><span class="num">9</span><h4 class="item-name">萬寧｜買 1 送 1 及買 4 送煎鍋</h4></div><dl>
+<div class="row"><dt>商品</dt><dd>精選護舒寶及沐浴產品；精選頭髮護理產品；舒適達指定牙膏；羽。酵茶枇杷葉混合發酵茶 20 包裝；雪肌精護膚產品</dd></div>
+<div class="row"><dt>優惠</dt><dd class="price">精選護舒寶及沐浴產品買 1 送 1；精選頭髮護理產品買第 2 件半價；買舒適達指定牙膏 4 件送美亞 Prestige 25 厘米易潔煎鍋 1 件及詩樂氏多效消毒潔廁液 500 毫升 1 件；羽。酵茶買 3 送 1；個人護理買 3 件滿 $99 送 DoDoME 香氛潔廁液 500 毫升 1 件；11月20日至22日屯門市廣場雪肌精快閃：免費試用裝、購物禮贈及限定優惠價；AlipayHK 滿 $500 減 $50；網店新會員碼 JOINUS45 滿 $388 減 $45</dd></div>
+<div class="row"><dt>2 件比較</dt><dd>未能核實（未核實買 1 送 1 及第 2 件半價產品單價及同款參考價）</dd></div>
+<div class="row"><dt>期間</dt><dd>11月20日至11月26日；雪肌精快閃 11月20日至11月22日；AlipayHK 及 JOINUS45 至 11月30日</dd></div>
+<div class="row"><dt>條款</dt><dd>買 1 送 1 及第 2 件半價以 2 件計，價錢較低 1 件免費或半價；贈品每發票計，送完即止；部分分店不適用</dd></div>
+</dl></article>
+</div></section>
+
+<section class="group"><div class="group-head"><h3>其他</h3><span class="gcount">第 10 項，共 1 項</span></div><div class="cards">
+<article class="card"><div class="card-head"><span class="num">10</span><h4 class="item-name">其他｜HKTVmall 馬來西亞館碼及新客碼；DONKI 玩具節；city'super 聖誕饗宴</h4></div><dl>
+<div class="row"><dt>商品</dt><dd>HKTVmall 馬來西亞館產品及新客首單；DON DON DONKI 指定玩具公仔；city'super 聖誕饗宴</dd></div>
+<div class="row"><dt>優惠</dt><dd class="price">HKTVmall 碼 MYSAVE50 滿 $350 減 $50；新客碼 2026NOV50 滿 $200 減 $50；DONKI 玩具節：指定玩具公仔買 2 件 88 折；安信 EarnMORE／WeWa 卡單筆滿 $300 回 $30；city'super 聖誕饗宴預訂享 8 折</dd></div>
+<div class="row"><dt>2 件比較</dt><dd>未能核實（未核實指定玩具單價及同款參考價）</dd></div>
+<div class="row"><dt>期間</dt><dd>MYSAVE50 至 2027年1月31日；2026NOV50 新客首單；DONKI 玩具節 11月10日至11月30日；安信回贈 11月1日至 2027年2月28日；city'super 饗宴 8 折至 11月23日</dd></div>
+<div class="row"><dt>條款</dt><dd>每次付款只可用 1 個碼；新客碼每帳戶限用 1 次；DONKI 玩具節不適用於 Pokémon 及 ONE PIECE 卡牌、Nintendo Switch、聖誕主題商品、Sanrio 螃蟹系列、公價及清貨；安信須先在 OmyCard App 登記，每人全期最高回 $60</dd></div>
+</dl></article>
+</div></section>
+</div>
+
+<footer class="notes">
+<p>價錢以門市／網店當日為準。數量有限，售完即止。</p>
+</footer>
+</section>
+
+<section class="pane pane-text" aria-label="文字">
+<div class="pre-scroll"><pre class="plain" id="plainText21">11月21日（星期六）
+
+搜查 10 個平台：HKTVmall、百佳、惠康／Market Place、萬寧、AEON、屈臣氏、DON DON DONKI、759 阿信屋、SOGO、city'super。10 個今日都有特別優惠。
+
+今日重點：
+- 屈臣氏全場無門檻 88 折只限今日：門市任何消費加送 $100 優惠券。
+- 759 週六限定：樂悠咭買麵包每件減 $2，只限今日。
+- 百佳新鮮檸檬 $1/個，至 11 月 22 日。
+- 759 電子會員快閃：滿 $100 享全單 7 折，至 11 月 22 日。
+- 萬寧雪肌精快閃：11 月 20 日至 22 日。
+- SOGO 感謝祭最後 2 日：全店 2 倍積分。
+- AEON 感謝日：會員及指定信用卡享照價 95 折，至 11 月 23 日。
+- 惠康雪糕雪條買 5 件享 8 折，至 11 月 26 日。
+
+1. 屈臣氏｜11月21日全場無門檻 88 折及送券。優惠：易賞錢會員全場無門檻 88 折（網店碼 12OFF）；門市任何消費加送 $100 優惠券；護膚／美妝滿 $150 送 $50 券；健康產品滿 $150 送 $10 券；AlipayHK 滿 $200 減 $20。期間：11月21日（只限今日）。條款：只限易賞錢會員；88 折期間現金優惠券暫停使用；禮券、初生嬰兒奶粉及指定產品除外；$100 券數量有限，送完即止。
+2. 百佳｜新鮮檸檬 $1/個。優惠價：$1/個（參考價：未能核實）。期間：11月20日至11月22日。條款：只限門市；適用於大部分百佳、FUSION、TASTE 及 INTERNATIONAL；不適用於 PNS 網購及 TASTE x FRESH；每張發票計算；數量有限，售完即止。
+3. 百佳｜快閃特賣場精選。商品：百佳快閃特賣場：不倒翁黑椒牛骨拉麵碗、皇冠咖啡曲奇、Ariel 抗菌洗衣液補充裝、Castle 5 合 1 抗菌洗衣珠、華園香港手信派對零食包、Calbee Jagabee 薯條三重裝。優惠價：拉麵碗 $2（參考價：未能核實）；曲奇 $6（參考價：未能核實）；洗衣液 $37（參考價：未能核實）；洗衣珠 $42（參考價：未能核實）；零食包 $10（參考價：未能核實）；薯條 $23（參考價：未能核實）。期間：11月20日起（結束日未核實）。條款：只限天水圍 +WOO 嘉湖 1 期 2 樓 220 號舖；營業時間 08:00 至 20:00；數量有限，售完即止。
+4. 百佳｜網購優惠碼。商品：百佳網購送貨及落佳拎訂單。優惠：碼 NOVHD11 滿 $600 享 92 折（最高減 $100）；碼 NOVFREE11 滿 $350 免運費；碼 NOVCNC11 落佳拎滿 $250 減 $20；易賞錢 App 領門市電子優惠券。期間：11月1日至11月30日。條款：門市券：買滿 $120 包 1 件佳之選減 $10，買滿 $200 減 $12；每單限用 1 個網購碼。
+5. 百佳｜飲品滿額送清雞湯及蠔油。商品：屈臣氏蒸餾水品牌常溫或冷凍飲品。優惠：買滿 $65 送屈臣氏礦物質有氣水 6 罐裝、史雲生清雞湯（澳洲版）1 公升及淘大特級蠔油 555 克；屈臣氏蒸餾水旗艦店滿 $180 送電解質運動飲品 500 毫升 2 件；滿 $220 加送 IF 茉莉香米味椰青水 350 毫升 2 件；買 WAITROSE 產品滿 $100 送 $15 電子優惠券；新客首張 PNS App 訂單滿 $399 碼 PNSAPP 享 9 折及免運費。期間：至11月26日。條款：只限 PNS 網購；贈品數量有限，送完即止。
+6. 惠康｜雪糕雪條買 5 件享 8 折。商品：指定單件裝雪糕或雪條，包括雀巢、維記、阿波羅、Binggrae、樂天、森永、Seoju 及阿奇儂。優惠：買 5 件或以上享 8 折。期間：11月20日至11月26日。條款：只限門市；日本大山產品、新港城阿波羅櫃位產品及換購品或贈品不適用；部分貨品只限指定分店。
+7. AEON｜感謝日 95 折及網店碼。商品：AEON 門市、Living Plaza 及 Daiso Japan 貨品；AEONCITY 網上超市貨品。優惠：11月20日至23日感謝日：會員卡或指定 AEON 信用卡以指定付款方式購物享照價 95 折；Living Plaza 及 Daiso Japan 買 4 送 1；Black Friday 精選貨品半價、杯裝啫喱 3 件 $12、精選貼紙 $6；網店碼 ACNOV49 滿 $599 減 $49、ACNOV99 滿 $999 減 $99、ACNOV219 滿 $1,999 減 $219。期間：感謝日 11月20日至11月23日；買 4 送 1 至 11月23日；Black Friday 至 12月6日；網店碼 11月1日至11月27日。條款：感謝日 95 折不適用於 AEON BETA 會員及部分貨品；網店碼只適用於網上超市貨品，每單限用 1 個碼。
+8. 759 阿信屋｜電子會員快閃 7 折及週六麵包減 $2。商品：759 阿信屋分店貨品；759 麵包工房系列產品。優惠：電子會員折實滿 $100 享全單 7 折；逢星期六憑樂悠咭買麵包工房產品每件減 $2。期間：電子會員快閃 11月19日至11月22日；麵包減 $2 只限 11月21日星期六。條款：7 折須出示 759 Online App 內電子會員二維碼，只限分店；麵包減 $2 須以樂悠咭付款，只限指定分店。
+9. 萬寧｜買 1 送 1 及買 4 送煎鍋。商品：精選護舒寶及沐浴產品；精選頭髮護理產品；舒適達指定牙膏；羽。酵茶枇杷葉混合發酵茶 20 包裝；雪肌精護膚產品。優惠：精選護舒寶及沐浴產品買 1 送 1；精選頭髮護理產品買第 2 件半價；買舒適達指定牙膏 4 件送美亞 Prestige 25 厘米易潔煎鍋 1 件及詩樂氏多效消毒潔廁液 500 毫升 1 件；羽。酵茶買 3 送 1；個人護理買 3 件滿 $99 送 DoDoME 香氛潔廁液 500 毫升 1 件；11月20日至22日屯門市廣場雪肌精快閃：免費試用裝、購物禮贈及限定優惠價；AlipayHK 滿 $500 減 $50；網店新會員碼 JOINUS45 滿 $388 減 $45。2 件比較：未能核實（未核實買 1 送 1 及第 2 件半價產品單價及同款參考價）。期間：11月20日至11月26日；雪肌精快閃 11月20日至11月22日；AlipayHK 及 JOINUS45 至 11月30日。條款：買 1 送 1 及第 2 件半價以 2 件計，價錢較低 1 件免費或半價；贈品每發票計，送完即止；部分分店不適用。
+10. 其他｜HKTVmall 馬來西亞館碼及新客碼；DONKI 玩具節；city'super 聖誕饗宴。商品：HKTVmall 馬來西亞館產品及新客首單；DON DON DONKI 指定玩具公仔；city'super 聖誕饗宴。優惠：HKTVmall 碼 MYSAVE50 滿 $350 減 $50；新客碼 2026NOV50 滿 $200 減 $50；DONKI 玩具節：指定玩具公仔買 2 件 88 折；安信 EarnMORE／WeWa 卡單筆滿 $300 回 $30；city'super 聖誕饗宴預訂享 8 折。2 件比較：未能核實（未核實指定玩具單價及同款參考價）。期間：MYSAVE50 至 2027年1月31日；2026NOV50 新客首單；DONKI 玩具節 11月10日至11月30日；安信回贈 11月1日至 2027年2月28日；city'super 饗宴 8 折至 11月23日。條款：每次付款只可用 1 個碼；新客碼每帳戶限用 1 次；DONKI 玩具節不適用於 Pokémon 及 ONE PIECE 卡牌、Nintendo Switch、聖誕主題商品、Sanrio 螃蟹系列、公價及清貨；安信須先在 OmyCard App 登記，每人全期最高回 $60。
+
+價錢以門市／網店當日為準。數量有限，售完即止。</pre></div>
+</section>
+</div>
+</div><!-- /panel-21 -->
+
+<div class="day-panel hidden-panel" id="panel-20" role="tabpanel" aria-labelledby="tab-20">
+<header class="top">
+<p class="dateline">2026 年 11 月 20 日（星期五）</p>
+<h2 class="panel-title">11月20日（星期五）</h2>
+<p class="platform-line">搜查 10 個平台：HKTVmall、百佳、惠康／Market Place、萬寧、AEON、屈臣氏、DON DON DONKI、759 阿信屋、SOGO、city'super。10 個今日都有特別優惠。</p>
+</header>
+
+<div class="viewbar">
+<div class="seg" role="group" aria-label="版本切換">
+<button type="button" id="btnHtml20" aria-pressed="true">HTML</button>
+<button type="button" id="btnText20" aria-pressed="false">文字</button>
+</div>
+<div class="text-actions" id="textActions20">
+<button type="button" id="btnCopy20">複製文字</button>
+<button type="button" id="btnDl20">下載.txt</button>
+</div>
+<p class="view-note" id="viewNote20">兩個檢視內容相同，共 10 項。切去「文字」即可睇純文字。</p>
+<span class="copy-msg" id="copyMsg20" role="status"></span>
+</div>
+
+<div class="compare mode-html" id="compare20">
+<section class="pane pane-html" aria-label="HTML">
+<div class="tips">
+<h2>今日重點</h2>
+<ul>
+<li>惠康網店大折日只限今日：滿 $888 享全場 88 折。</li>
+<li>百佳快閃特賣場今日開始：全場低至 2 折，天水圍嘉湖。</li>
+<li>HKTVmall 星期五 VIP：滿 $500 享 95 折。</li>
+<li>AEON 感謝日今日：付費會員及指定 AEON 信用卡享照價 95 折。</li>
+<li>759 電子會員快閃：滿 $100 享全單 7 折，至 11 月 22 日。</li>
+<li>屈臣氏又一城：買滿 $688 享 88 折，11 月 20 日至 22 日。</li>
+<li>SOGO 感謝祭最後 3 日：全店 2 倍積分。</li>
+<li>萬寧雪肌精快閃今日開始：11 月 20 日至 22 日。</li>
+</ul>
+</div>
+
+<div id="groups20">
+<section class="group"><div class="group-head"><h3>惠康</h3><span class="gcount">第 1 項，共 1 項</span></div><div class="cards">
+<article class="card is-urgent"><div class="card-head"><span class="num">1</span><h4 class="item-name">惠康｜網店大折日全場 88 折</h4><span class="badge badge-today">只限今日</span></div><dl>
+<div class="row"><dt>優惠</dt><dd class="price">單一交易折實滿 $888 享全場 88 折</dd></div>
+<div class="row"><dt>期間</dt><dd>11月20日（只限今日）</dd></div>
+<div class="row"><dt>條款</dt><dd>需先領券及選送貨上門；適用於惠康網店、Market Place 網店及 yuu 網購；不包括初生嬰兒配方奶粉、大師姐產品、指定月餅、禮券、商戶直送及指定產品</dd></div>
+</dl></article>
+</div></section>
+
+<section class="group"><div class="group-head"><h3>百佳</h3><span class="gcount">第 2–3 項，共 2 項</span></div><div class="cards">
+<article class="card"><div class="card-head"><span class="num">2</span><h4 class="item-name">百佳｜快閃特賣場精選</h4></div><dl>
+<div class="row"><dt>商品</dt><dd>百佳快閃特賣場：不倒翁黑椒牛骨拉麵碗、皇冠咖啡曲奇、Ariel 抗菌洗衣液補充裝、Castle 5 合 1 抗菌洗衣珠、華園香港手信派對零食包、Calbee Jagabee 薯條三重裝</dd></div>
+<div class="row"><dt>優惠價</dt><dd class="price">拉麵碗 $2（參考價：未能核實）；曲奇 $6（參考價：未能核實）；洗衣液 $37（參考價：未能核實）；洗衣珠 $42（參考價：未能核實）；零食包 $10（參考價：未能核實）；薯條 $23（參考價：未能核實）</dd></div>
+<div class="row"><dt>期間</dt><dd>11月20日起（結束日未核實）</dd></div>
+<div class="row"><dt>條款</dt><dd>只限天水圍 +WOO 嘉湖 1 期 2 樓 220 號舖；營業時間 08:00 至 20:00；數量有限，售完即止</dd></div>
+</dl></article>
+<article class="card"><div class="card-head"><span class="num">3</span><h4 class="item-name">百佳｜網購優惠碼</h4></div><dl>
+<div class="row"><dt>商品</dt><dd>百佳網購送貨及落佳拎訂單</dd></div>
+<div class="row"><dt>優惠</dt><dd class="price">碼 NOVHD11 滿 $600 享 92 折（最高減 $100）；碼 NOVFREE11 滿 $350 免運費；碼 NOVCNC11 落佳拎滿 $250 減 $20；易賞錢 App 領門市電子優惠券</dd></div>
+<div class="row"><dt>期間</dt><dd>11月1日至11月30日</dd></div>
+<div class="row"><dt>條款</dt><dd>門市券：買滿 $120 包 1 件佳之選減 $10，買滿 $200 減 $12；每單限用 1 個網購碼</dd></div>
+</dl></article>
+</div></section>
+
+<section class="group"><div class="group-head"><h3>HKTVmall</h3><span class="gcount">第 4 項，共 1 項</span></div><div class="cards">
+<article class="card"><div class="card-head"><span class="num">4</span><h4 class="item-name">HKTVmall｜星期五 VIP 95 折</h4></div><dl>
+<div class="row"><dt>商品</dt><dd>HKTVmall VIP 會員購物；馬來西亞館產品；新客首單</dd></div>
+<div class="row"><dt>優惠</dt><dd class="price">碼 VIPDAY95 滿 $500 享 95 折；馬來西亞館碼 MYSAVE50 滿 $350 減 $50；新客碼 2026NOV50 滿 $200 減 $50</dd></div>
+<div class="row"><dt>期間</dt><dd>VIPDAY95 只限 11月20日星期五；MYSAVE50 至 2027年1月31日；2026NOV50 新客首單</dd></div>
+<div class="row"><dt>條款</dt><dd>VIPDAY95 只限 VIP 會員；每次付款只可用 1 個碼；新客碼每帳戶限用 1 次</dd></div>
+</dl></article>
+</div></section>
+
+<section class="group"><div class="group-head"><h3>AEON</h3><span class="gcount">第 5 項，共 1 項</span></div><div class="cards">
+<article class="card"><div class="card-head"><span class="num">5</span><h4 class="item-name">AEON｜感謝日 95 折及網店碼</h4></div><dl>
+<div class="row"><dt>商品</dt><dd>AEON 門市及 AEONCITY 網上超市貨品</dd></div>
+<div class="row"><dt>優惠</dt><dd class="price">11月20日感謝日：付費會員及指定 AEON 信用卡持有人享照價 95 折；網店碼 ACNOV49 滿 $599 減 $49、ACNOV99 滿 $999 減 $99、ACNOV219 滿 $1,999 減 $219</dd></div>
+<div class="row"><dt>期間</dt><dd>感謝日只限 11月20日；網店碼 11月1日至11月27日</dd></div>
+<div class="row"><dt>條款</dt><dd>感謝日 95 折不可與其他優惠或折扣券同時用；不適用於初生嬰兒配方奶粉、禮券及指定特價商品；網店碼只適用於網上超市貨品，每單限用 1 個碼</dd></div>
+</dl></article>
+</div></section>
+
+<section class="group"><div class="group-head"><h3>759 阿信屋</h3><span class="gcount">第 6 項，共 1 項</span></div><div class="cards">
+<article class="card"><div class="card-head"><span class="num">6</span><h4 class="item-name">759 阿信屋｜電子會員快閃 7 折</h4></div><dl>
+<div class="row"><dt>商品</dt><dd>759 阿信屋分店貨品</dd></div>
+<div class="row"><dt>優惠</dt><dd class="price">電子會員折實滿 $100 享全單 7 折</dd></div>
+<div class="row"><dt>期間</dt><dd>11月19日至11月22日</dd></div>
+<div class="row"><dt>條款</dt><dd>須出示 759 Online App 內電子會員二維碼；只限分店</dd></div>
+</dl></article>
+</div></section>
+
+<section class="group"><div class="group-head"><h3>萬寧</h3><span class="gcount">第 7 項，共 1 項</span></div><div class="cards">
+<article class="card"><div class="card-head"><span class="num">7</span><h4 class="item-name">萬寧｜雪肌精快閃及 AlipayHK／新會員</h4></div><dl>
+<div class="row"><dt>商品</dt><dd>萬寧雪肌精護膚產品；萬寧網店購物</dd></div>
+<div class="row"><dt>優惠</dt><dd class="price">11月20日至22日屯門市廣場萬寧快閃：免費試用裝、購物禮贈及限定優惠價；AlipayHK 滿 $500 減 $50；網店新會員碼 JOINUS45 滿 $388 減 $45</dd></div>
+<div class="row"><dt>期間</dt><dd>雪肌精快閃 11月20日至11月22日；AlipayHK 及 JOINUS45 至 11月30日</dd></div>
+<div class="row"><dt>條款</dt><dd>雪肌精快閃只限指定分店，11月20日 12:00 至 18:00 在屯門市廣場；數量有限，送完即止</dd></div>
+</dl></article>
+</div></section>
+
+<section class="group"><div class="group-head"><h3>屈臣氏</h3><span class="gcount">第 8 項，共 1 項</span></div><div class="cards">
+<article class="card"><div class="card-head"><span class="num">8</span><h4 class="item-name">屈臣氏｜又一城 88 折及黑五網店碼</h4></div><dl>
+<div class="row"><dt>商品</dt><dd>屈臣氏又一城分店貨品；屈臣氏網店精選產品</dd></div>
+<div class="row"><dt>優惠</dt><dd class="price">又一城買滿 $688 享 88 折；買滿 $1,488 送 20 吋行李箱（價值 $499）；黑五碼 BLACK5 滿 $538 送維他奶原味豆奶 250 毫升 6 包裝及舒暢感受 B3 益生菌體驗裝；碼 DEAL950 滿 $950 送普樂氏迷你電蒸籠 3 公升或維他蘋果綠茶 250 毫升 6 包裝 4 件或倩絲面紙 24 包</dd></div>
+<div class="row"><dt>期間</dt><dd>又一城 88 折 11月20日至11月22日；送行李箱至 12月6日；黑五碼 11月13日至12月3日</dd></div>
+<div class="row"><dt>條款</dt><dd>又一城優惠只限又一城分店，單一發票及折實價計算；黑五碼只限網店及易賞錢會員，每單限用 1 個碼，贈品隨機，送完即止</dd></div>
+</dl></article>
+</div></section>
+
+<section class="group"><div class="group-head"><h3>SOGO</h3><span class="gcount">第 9 項，共 1 項</span></div><div class="cards">
+<article class="card"><div class="card-head"><span class="num">9</span><h4 class="item-name">SOGO｜感謝祭最後 3 日</h4></div><dl>
+<div class="row"><dt>商品</dt><dd>崇光銅鑼灣店及啟德店貨品</dd></div>
+<div class="row"><dt>優惠</dt><dd class="price">SOGO Rewards 會員全店 2 倍積分；指定專櫃即日累積滿 $4,800 送精選美酒 1 支（銅鑼灣）或美食禮盒 1 份（啟德）；滙豐信用卡累積滿 $3,000 享額外 6% 獎賞錢回贈</dd></div>
+<div class="row"><dt>期間</dt><dd>11月20日至11月22日（感謝祭至 11月22日）</dd></div>
+<div class="row"><dt>條款</dt><dd>2 倍積分指定貨品除外；滿 $4,800 最多 2 張發票</dd></div>
+</dl></article>
+</div></section>
+
+<section class="group"><div class="group-head"><h3>其他</h3><span class="gcount">第 10 項，共 1 項</span></div><div class="cards">
+<article class="card"><div class="card-head"><span class="num">10</span><h4 class="item-name">其他｜DONKI 玩具節及安信回贈；city'super 聖誕饗宴</h4></div><dl>
+<div class="row"><dt>商品</dt><dd>DON DON DONKI 指定玩具公仔；city'super 聖誕饗宴</dd></div>
+<div class="row"><dt>優惠</dt><dd class="price">DONKI 玩具節：指定玩具公仔買 2 件 88 折；安信 EarnMORE／WeWa 卡單筆滿 $300 回 $30；city'super 聖誕饗宴預訂享 8 折</dd></div>
+<div class="row"><dt>2 件比較</dt><dd>未能核實（未核實指定玩具單價及同款參考價）</dd></div>
+<div class="row"><dt>期間</dt><dd>DONKI 玩具節 11月10日至11月30日；安信回贈 11月1日至 2027年2月28日；city'super 饗宴 8 折至 11月23日</dd></div>
+<div class="row"><dt>條款</dt><dd>DONKI 玩具節不適用於 Pokémon 及 ONE PIECE 卡牌、Nintendo Switch、聖誕主題商品、Sanrio 螃蟹系列、公價及清貨；安信須先在 OmyCard App 登記，每人全期最高回 $60</dd></div>
+</dl></article>
+</div></section>
+</div>
+
+<footer class="notes">
+<p>價錢以門市／網店當日為準。數量有限，售完即止。</p>
+</footer>
+</section>
+
+<section class="pane pane-text" aria-label="文字">
+<div class="pre-scroll"><pre class="plain" id="plainText20">11月20日（星期五）
+
+搜查 10 個平台：HKTVmall、百佳、惠康／Market Place、萬寧、AEON、屈臣氏、DON DON DONKI、759 阿信屋、SOGO、city'super。10 個今日都有特別優惠。
+
+今日重點：
+- 惠康網店大折日只限今日：滿 $888 享全場 88 折。
+- 百佳快閃特賣場今日開始：全場低至 2 折，天水圍嘉湖。
+- HKTVmall 星期五 VIP：滿 $500 享 95 折。
+- AEON 感謝日今日：付費會員及指定 AEON 信用卡享照價 95 折。
+- 759 電子會員快閃：滿 $100 享全單 7 折，至 11 月 22 日。
+- 屈臣氏又一城：買滿 $688 享 88 折，11 月 20 日至 22 日。
+- SOGO 感謝祭最後 3 日：全店 2 倍積分。
+- 萬寧雪肌精快閃今日開始：11 月 20 日至 22 日。
+
+1. 惠康｜網店大折日全場 88 折。優惠：單一交易折實滿 $888 享全場 88 折。期間：11月20日（只限今日）。條款：需先領券及選送貨上門；適用於惠康網店、Market Place 網店及 yuu 網購；不包括初生嬰兒配方奶粉、大師姐產品、指定月餅、禮券、商戶直送及指定產品。
+2. 百佳｜快閃特賣場精選。商品：百佳快閃特賣場：不倒翁黑椒牛骨拉麵碗、皇冠咖啡曲奇、Ariel 抗菌洗衣液補充裝、Castle 5 合 1 抗菌洗衣珠、華園香港手信派對零食包、Calbee Jagabee 薯條三重裝。優惠價：拉麵碗 $2（參考價：未能核實）；曲奇 $6（參考價：未能核實）；洗衣液 $37（參考價：未能核實）；洗衣珠 $42（參考價：未能核實）；零食包 $10（參考價：未能核實）；薯條 $23（參考價：未能核實）。期間：11月20日起（結束日未核實）。條款：只限天水圍 +WOO 嘉湖 1 期 2 樓 220 號舖；營業時間 08:00 至 20:00；數量有限，售完即止。
+3. 百佳｜網購優惠碼。商品：百佳網購送貨及落佳拎訂單。優惠：碼 NOVHD11 滿 $600 享 92 折（最高減 $100）；碼 NOVFREE11 滿 $350 免運費；碼 NOVCNC11 落佳拎滿 $250 減 $20；易賞錢 App 領門市電子優惠券。期間：11月1日至11月30日。條款：門市券：買滿 $120 包 1 件佳之選減 $10，買滿 $200 減 $12；每單限用 1 個網購碼。
+4. HKTVmall｜星期五 VIP 95 折。商品：HKTVmall VIP 會員購物；馬來西亞館產品；新客首單。優惠：碼 VIPDAY95 滿 $500 享 95 折；馬來西亞館碼 MYSAVE50 滿 $350 減 $50；新客碼 2026NOV50 滿 $200 減 $50。期間：VIPDAY95 只限 11月20日星期五；MYSAVE50 至 2027年1月31日；2026NOV50 新客首單。條款：VIPDAY95 只限 VIP 會員；每次付款只可用 1 個碼；新客碼每帳戶限用 1 次。
+5. AEON｜感謝日 95 折及網店碼。商品：AEON 門市及 AEONCITY 網上超市貨品。優惠：11月20日感謝日：付費會員及指定 AEON 信用卡持有人享照價 95 折；網店碼 ACNOV49 滿 $599 減 $49、ACNOV99 滿 $999 減 $99、ACNOV219 滿 $1,999 減 $219。期間：感謝日只限 11月20日；網店碼 11月1日至11月27日。條款：感謝日 95 折不可與其他優惠或折扣券同時用；不適用於初生嬰兒配方奶粉、禮券及指定特價商品；網店碼只適用於網上超市貨品，每單限用 1 個碼。
+6. 759 阿信屋｜電子會員快閃 7 折。商品：759 阿信屋分店貨品。優惠：電子會員折實滿 $100 享全單 7 折。期間：11月19日至11月22日。條款：須出示 759 Online App 內電子會員二維碼；只限分店。
+7. 萬寧｜雪肌精快閃及 AlipayHK／新會員。商品：萬寧雪肌精護膚產品；萬寧網店購物。優惠：11月20日至22日屯門市廣場萬寧快閃：免費試用裝、購物禮贈及限定優惠價；AlipayHK 滿 $500 減 $50；網店新會員碼 JOINUS45 滿 $388 減 $45。期間：雪肌精快閃 11月20日至11月22日；AlipayHK 及 JOINUS45 至 11月30日。條款：雪肌精快閃只限指定分店，11月20日 12:00 至 18:00 在屯門市廣場；數量有限，送完即止。
+8. 屈臣氏｜又一城 88 折及黑五網店碼。商品：屈臣氏又一城分店貨品；屈臣氏網店精選產品。優惠：又一城買滿 $688 享 88 折；買滿 $1,488 送 20 吋行李箱（價值 $499）；黑五碼 BLACK5 滿 $538 送維他奶原味豆奶 250 毫升 6 包裝及舒暢感受 B3 益生菌體驗裝；碼 DEAL950 滿 $950 送普樂氏迷你電蒸籠 3 公升或維他蘋果綠茶 250 毫升 6 包裝 4 件或倩絲面紙 24 包。期間：又一城 88 折 11月20日至11月22日；送行李箱至 12月6日；黑五碼 11月13日至12月3日。條款：又一城優惠只限又一城分店，單一發票及折實價計算；黑五碼只限網店及易賞錢會員，每單限用 1 個碼，贈品隨機，送完即止。
+9. SOGO｜感謝祭最後 3 日。商品：崇光銅鑼灣店及啟德店貨品。優惠：SOGO Rewards 會員全店 2 倍積分；指定專櫃即日累積滿 $4,800 送精選美酒 1 支（銅鑼灣）或美食禮盒 1 份（啟德）；滙豐信用卡累積滿 $3,000 享額外 6% 獎賞錢回贈。期間：11月20日至11月22日（感謝祭至 11月22日）。條款：2 倍積分指定貨品除外；滿 $4,800 最多 2 張發票。
+10. 其他｜DONKI 玩具節及安信回贈；city'super 聖誕饗宴。商品：DON DON DONKI 指定玩具公仔；city'super 聖誕饗宴。優惠：DONKI 玩具節：指定玩具公仔買 2 件 88 折；安信 EarnMORE／WeWa 卡單筆滿 $300 回 $30；city'super 聖誕饗宴預訂享 8 折。2 件比較：未能核實（未核實指定玩具單價及同款參考價）。期間：DONKI 玩具節 11月10日至11月30日；安信回贈 11月1日至 2027年2月28日；city'super 饗宴 8 折至 11月23日。條款：DONKI 玩具節不適用於 Pokémon 及 ONE PIECE 卡牌、Nintendo Switch、聖誕主題商品、Sanrio 螃蟹系列、公價及清貨；安信須先在 OmyCard App 登記，每人全期最高回 $60。
+
+價錢以門市／網店當日為準。數量有限，售完即止。</pre></div>
+</section>
+</div>
+</div><!-- /panel-20 -->
+
+
+
+
+</div>
+
+
+<script>
+(function(){
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.datetab'));
+  function show(day){
+    tabs.forEach(function(t){
+      var on = t.getAttribute('data-day') === day;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      var panel = document.getElementById(t.getAttribute('aria-controls'));
+      if (panel) panel.classList.toggle('hidden-panel', !on);
+    });
+    window.scrollTo(0,0);
+  }
+  tabs.forEach(function(t){ t.addEventListener('click', function(){ show(t.getAttribute('data-day')); }); });
+  show('22');
+})();
+</script>
+<script>
+(function(){
+  var compare = document.getElementById('compare22');
+  if (!compare) return;
+  var bH = document.getElementById('btnHtml22'), bT = document.getElementById('btnText22');
+  var acts = document.getElementById('textActions22'), note = document.getElementById('viewNote22');
+  var plain = document.getElementById('plainText22'), msg = document.getElementById('copyMsg22');
+  function setMode(m){
+    compare.className = 'compare mode-' + m;
+    bH.setAttribute('aria-pressed', m==='html'?'true':'false');
+    bT.setAttribute('aria-pressed', m==='text'?'true':'false');
+    acts.style.display = (m==='html') ? 'none' : 'flex';
+    note.textContent = m==='html' ? '兩個檢視內容相同，共 10 項。切去「文字」即可睇純文字。' : '文字：純文字全文，可複製或下載成 .txt。';
+  }
+  bH.addEventListener('click', function(){ setMode('html'); });
+  bT.addEventListener('click', function(){ setMode('text'); });
+  function flash(t){ msg.textContent = t; setTimeout(function(){ msg.textContent=''; }, 2600); }
+  document.getElementById('btnCopy22').addEventListener('click', function(){
+    var txt = plain.textContent;
+    function fb(){ var ta=document.createElement('textarea'); ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); flash('已複製文字全文。'); }catch(e){ flash('複製失敗，請長按文字自行複製。'); } document.body.removeChild(ta); }
+    if (navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(function(){ flash('已複製文字全文。'); }, fb); } else { fb(); }
+  });
+  document.getElementById('btnDl22').addEventListener('click', function(){
+    var blob = new Blob([plain.textContent], {type:'text/plain;charset=utf-8'});
+    var url = URL.createObjectURL(blob); var a=document.createElement('a');
+    a.href=url; a.download='每日優惠-11月22日-文字.txt'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 2000); flash('已下載文字 .txt。');
+  });
+})();
+</script>
+<script>
+(function(){
+  var compare = document.getElementById('compare20');
+  if (!compare) return;
+  var bH = document.getElementById('btnHtml20'), bT = document.getElementById('btnText20');
+  var acts = document.getElementById('textActions20'), note = document.getElementById('viewNote20');
+  var plain = document.getElementById('plainText20'), msg = document.getElementById('copyMsg20');
+  function setMode(m){
+    compare.className = 'compare mode-' + m;
+    bH.setAttribute('aria-pressed', m==='html'?'true':'false');
+    bT.setAttribute('aria-pressed', m==='text'?'true':'false');
+    acts.style.display = (m==='html') ? 'none' : 'flex';
+    note.textContent = m==='html' ? '兩個檢視內容相同，共 10 項。切去「文字」即可睇純文字。' : '文字：純文字全文，可複製或下載成 .txt。';
+  }
+  bH.addEventListener('click', function(){ setMode('html'); });
+  bT.addEventListener('click', function(){ setMode('text'); });
+  function flash(t){ msg.textContent = t; setTimeout(function(){ msg.textContent=''; }, 2600); }
+  document.getElementById('btnCopy20').addEventListener('click', function(){
+    var txt = plain.textContent;
+    function fb(){ var ta=document.createElement('textarea'); ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); flash('已複製文字全文。'); }catch(e){ flash('複製失敗，請長按文字自行複製。'); } document.body.removeChild(ta); }
+    if (navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(function(){ flash('已複製文字全文。'); }, fb); } else { fb(); }
+  });
+  document.getElementById('btnDl20').addEventListener('click', function(){
+    var blob = new Blob([plain.textContent], {type:'text/plain;charset=utf-8'});
+    var url = URL.createObjectURL(blob); var a=document.createElement('a');
+    a.href=url; a.download='每日優惠-11月20日-文字.txt'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 2000); flash('已下載文字 .txt。');
+  });
+})();
+</script>
+<script>
+(function(){
+  var compare = document.getElementById('compare21');
+  if (!compare) return;
+  var bH = document.getElementById('btnHtml21'), bT = document.getElementById('btnText21');
+  var acts = document.getElementById('textActions21'), note = document.getElementById('viewNote21');
+  var plain = document.getElementById('plainText21'), msg = document.getElementById('copyMsg21');
+  function setMode(m){
+    compare.className = 'compare mode-' + m;
+    bH.setAttribute('aria-pressed', m==='html'?'true':'false');
+    bT.setAttribute('aria-pressed', m==='text'?'true':'false');
+    acts.style.display = (m==='html') ? 'none' : 'flex';
+    note.textContent = m==='html' ? '兩個檢視內容相同，共 10 項。切去「文字」即可睇純文字。' : '文字：純文字全文，可複製或下載成 .txt。';
+  }
+  bH.addEventListener('click', function(){ setMode('html'); });
+  bT.addEventListener('click', function(){ setMode('text'); });
+  function flash(t){ msg.textContent = t; setTimeout(function(){ msg.textContent=''; }, 2600); }
+  document.getElementById('btnCopy21').addEventListener('click', function(){
+    var txt = plain.textContent;
+    function fb(){ var ta=document.createElement('textarea'); ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); flash('已複製文字全文。'); }catch(e){ flash('複製失敗，請長按文字自行複製。'); } document.body.removeChild(ta); }
+    if (navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(function(){ flash('已複製文字全文。'); }, fb); } else { fb(); }
+  });
+  document.getElementById('btnDl21').addEventListener('click', function(){
+    var blob = new Blob([plain.textContent], {type:'text/plain;charset=utf-8'});
+    var url = URL.createObjectURL(blob); var a=document.createElement('a');
+    a.href=url; a.download='每日優惠-11月21日-文字.txt'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 2000); flash('已下載文字 .txt。');
+  });
+})();
+</script>
+</body>
+</html>
