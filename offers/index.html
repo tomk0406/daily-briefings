@@ -237,6 +237,12 @@ footer.notes p { margin: 6px 0;}
 .offers-v9 .mech-item.muted p { color: var(--muted, var(--hatch-widget-muted, #666));}
 .offers-v9 .mech-chip { flex: none; font-size: 12px; line-height: 1.4; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft, var(--hatch-widget-surface-muted, #f5f5f5)); border: 1px solid var(--line, var(--hatch-widget-border, #ddd)); color: var(--accent, var(--hatch-widget-accent, #0d6a4c)); margin-top: 1px; white-space: nowrap;}
 .offers-v9 td .cat-pill { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px; background: var(--accent-soft, var(--hatch-widget-surface-muted, #f5f5f5)); border: 1px solid var(--line, var(--hatch-widget-border, #ddd)); white-space: nowrap;}
+.offers-v9 .offers-section { margin: 0 0 14px;}
+.offers-v9 .sec-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; text-align: left; font: inherit; font-size: 16px; font-weight: 700; line-height: 1.4; color: var(--ink, var(--hatch-widget-text, #222)); background: var(--accent-soft, var(--hatch-widget-surface-muted, #f5f5f5)); border: 1px solid var(--line, var(--hatch-widget-border, #ddd)); border-left: 4px solid var(--accent, var(--hatch-widget-accent, #0d6a4c)); border-radius: 8px; padding: 8px 12px; margin: 0 0 8px; cursor: pointer;}
+.offers-v9 .sec-head .sec-chev { flex: none; display: inline-block; font-size: 13px; color: var(--muted, var(--hatch-widget-muted, #666));}
+.offers-v9 .offers-section.collapsed .sec-body { display: none;}
+.offers-v9 .offers-section.collapsed .sec-head { margin-bottom: 0;}
+.offers-v9 .offers-section.collapsed .sec-head .sec-chev { transform: rotate(-90deg);}
 </style>
 </head>
 <body>
@@ -271,8 +277,11 @@ footer.notes p { margin: 6px 0;}
 
 <div class="compare mode-html" id="compare24">
 <section class="pane pane-html" aria-label="HTML">
+<div class="offers-v9">
+<div class="offers-section" id="sec-tips">
+<button type="button" class="sec-head" onclick="toggleOffersSection('sec-tips')" aria-expanded="true"><span class="sec-title">今日重點</span><span class="sec-chev">▾</span></button>
+<div class="sec-body">
 <div class="tips">
-<h2>今日重點</h2>
 <ul>
 <li>萬寧今日出位價：Aveeno 沐浴露 1000 毫升 $99，只限今日。</li>
 <li>HKTVmall 星期二碼：自取滿 $99 享 85 折，送貨滿 $699 享 88 折，只限今日及明日。</li>
@@ -282,7 +291,8 @@ footer.notes p { margin: 6px 0;}
 <li>屈臣氏美素佳兒金裝 3 號第 2 件半價，至 11 月 26 日。</li>
 </ul>
 </div>
-<div class="offers-v9">
+</div>
+</div>
 <div class="filter-bar" id="offers-filter">
 <span class="filter-label">超市：</span>
 <button type="button" class="fbtn" data-filter="all" aria-pressed="true" onclick="setOffersFilter('all')">全部</button>
@@ -306,8 +316,9 @@ footer.notes p { margin: 6px 0;}
 <button type="button" class="fbtn" aria-pressed="false" data-filter="母嬰" onclick="setOffersCategory('母嬰')">母嬰</button>
 </div>
 <p class="filter-note" id="offers-filter-note">顯示全部平台</p>
-<div class="ai-combos" id="ai-combos">
-<h2>AI推薦組合</h2>
+<div class="offers-section ai-combos" id="ai-combos">
+<button type="button" class="sec-head" onclick="toggleOffersSection('ai-combos')" aria-expanded="true"><span class="sec-title">AI推薦組合</span><span class="sec-chev">▾</span></button>
+<div class="sec-body">
 <p class="note">每組都係同一個超市、同一張單結帳。網店限定同門市限定優惠唔可以合併，買之前睇清楚條款。</p>
 <div class="combo" data-platform="萬寧">
 <h3>組合 1：萬寧「今日出位」組合</h3>
@@ -340,7 +351,10 @@ footer.notes p { margin: 6px 0;}
 <p class="combo-total">合共 $108.10；參考價合共 $151.90，慳 $43.80。惠康門市結帳（部分優惠唔適用於網店）。11月20日至11月26日。</p>
 </div>
 </div>
-<h2>超市優惠</h2>
+</div>
+<div class="offers-section" id="sec-mech">
+<button type="button" class="sec-head" onclick="toggleOffersSection('sec-mech')" aria-expanded="true"><span class="sec-title">超市優惠</span><span class="sec-chev">▾</span></button>
+<div class="sec-body">
 <div class="mech-group" data-platform="萬寧">
 <div class="mech-head"><h3>萬寧</h3><span class="mech-count">6 項優惠</span></div>
 <div class="mech-item"><span class="mech-chip">折扣</span><p>精選面膜產品買滿 <strong>$188</strong> 享 88 折（11月20日至11月27日）。</p></div>
@@ -406,7 +420,11 @@ footer.notes p { margin: 6px 0;}
 <div class="mech-head"><h3>SOGO</h3></div>
 <div class="mech-item muted"><p>今日無特別優惠（感謝祭已於 11 月 22 日結束）。</p></div>
 </div>
-<h2>表格一：個別優惠</h2>
+</div>
+</div>
+<div class="offers-section" id="sec-table">
+<button type="button" class="sec-head" onclick="toggleOffersSection('sec-table')" aria-expanded="true"><span class="sec-title">表格一：個別優惠</span><span class="sec-chev">▾</span></button>
+<div class="sec-body">
 <p id="offers-no-rows" style="display:none;">無符合篩選條件嘅商品。</p>
 <div class="tbl-wrap">
 <table>
@@ -491,6 +509,8 @@ footer.notes p { margin: 6px 0;}
 <tr data-platform="city'super" data-category="食品"><td>city'super</td><td><span class="cat-pill">食品</span></td><td>Foodie Wonderland Elite Feast Pass（22 張體驗券）</td><td>$399（原價 $480）</td><td>未能核實</td><td>city'super獨家</td><td>早鳥期至 11月28日下午 6 時；活動日 11月29日</td><td>只限 11月29日於 city'super 國際金融中心商場店使用；名額有限，售完即止</td></tr>
 </tbody>
 </table>
+</div>
+</div>
 </div>
 <p class="footer">價錢以門市／網店當日為準。數量有限，售完即止。</p>
 </div>
