@@ -1100,7 +1100,27 @@ city&#x27;super｜食品｜Foodie Wonderland Elite Feast Pass（22 張體驗券�
 var offersPlatform = 'all';
 var offersCategory = 'all';
 function setOffersFilter(p){ offersPlatform = p; applyOffersFilters(); }
-function setOffersCategory(c){ offersCategory = c; applyOffersFilters(); }
+function toggleOffersSection(id){
+  var sec = document.getElementById(id);
+  if (!sec) return;
+  var collapsed = sec.classList.toggle('collapsed');
+  var btn = sec.querySelector('.sec-head');
+  if (btn) btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+}
+function setOffersCategory(c){
+  offersCategory = c;
+  applyOffersFilters();
+  var secTable = document.getElementById('sec-table');
+  if (secTable && secTable.classList.contains('collapsed')) toggleOffersSection('sec-table');
+  var target = secTable;
+  if (c !== 'all') {
+    var rows = document.querySelectorAll('.offers-v9 table tr[data-platform]:not(.group)');
+    for (var i = 0; i < rows.length; i++) {
+      if (rows[i].style.display !== 'none') { target = rows[i]; break; }
+    }
+  }
+  if (target && target.scrollIntoView) target.scrollIntoView({behavior: 'smooth', block: 'start'});
+}
 function applyOffersFilters(){
   var btns = document.querySelectorAll('#offers-filter .fbtn');
   btns.forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.filter === offersPlatform ? 'true' : 'false'); });
