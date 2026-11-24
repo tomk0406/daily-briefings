@@ -204,12 +204,12 @@ footer.notes p { margin: 6px 0;}
 .offers-v9 p { margin: 4px 0;}
 .offers-v9 .note { background: var(--accent-soft, var(--hatch-widget-surface-muted, #f5f5f5)); border: 1px solid var(--line, var(--hatch-widget-border, #ddd)); border-radius: 8px; padding: 8px 10px; margin: 8px 0 12px; color: var(--muted, var(--hatch-widget-muted, #666));}
 .offers-v9 .tbl-wrap { overflow-x: auto; margin: 8px 0;}
-.offers-v9 table { border-collapse: collapse; width: 100%; min-width: 760px;}
+.offers-v9 table { border-collapse: collapse; width: 100%; min-width: 554px; table-layout: fixed;}
 .offers-v9 th, .offers-v9 td { border: 1px solid var(--line, var(--hatch-widget-border, #ddd)); padding: 6px 8px; text-align: left; vertical-align: top;}
 .offers-v9 thead th { position: sticky; top: 0; background: var(--surface, var(--hatch-widget-surface, #fff));}
 .offers-v9 tr.group td { background: var(--accent-soft, var(--hatch-widget-surface-muted, #f5f5f5)); font-weight: 700;}
 .offers-v9 td small, .offers-v9 small { color: var(--muted, var(--hatch-widget-muted, #666));}
-.offers-v9 td.num { white-space: nowrap;}
+.offers-v9 td.num { white-space: normal; padding: 6px 4px;}
 .offers-v9 ul { margin: 4px 0; padding-left: 18px;}
 .offers-v9 li { margin: 2px 0;}
 .offers-v9 .footer { margin-top: 16px; color: var(--muted, var(--hatch-widget-muted, #666));}
@@ -246,7 +246,11 @@ footer.notes p { margin: 6px 0;}
 .offers-v9 .item-cell { display: flex; flex-direction: column; gap: 4px; align-items: flex-start;}
 .offers-v9 .plat-name { font-weight: 700; white-space: nowrap;}
 .offers-v9 .prod-name { line-height: 1.5;}
-.offers-v9 th:first-child, .offers-v9 td:first-child { width: 36%;}
+.offers-v9 th:nth-child(2) { width: 104px;}
+.offers-v9 th:nth-child(3) { width: 88px;}
+.offers-v9 th:nth-child(4) { width: 76px;}
+.offers-v9 th:nth-child(5) { width: 72px;}
+.offers-v9 th:nth-child(6) { width: 70px;}
 </style>
 </head>
 <body>
