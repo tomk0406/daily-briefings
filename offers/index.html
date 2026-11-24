@@ -218,6 +218,25 @@ footer.notes p { margin: 6px 0;}
 .offers-v9 .fbtn[aria-pressed="true"] { background: var(--accent, var(--hatch-widget-accent, #0d6a4c)); color: var(--accent-ink, var(--hatch-widget-on-accent, #fff)); border-color: var(--accent, var(--hatch-widget-accent, #0d6a4c));}
 .offers-v9 .mech-group { margin: 4px 0 10px;}
 .offers-v9 .filter-note { color: var(--muted, var(--hatch-widget-muted, #666));}
+.offers-v9 .filter-label { font-weight: 700; align-self: center; margin-right: 2px;}
+.offers-v9 .cat-bar { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 10px;}
+.offers-v9 .ai-combos { margin: 0 0 4px;}
+.offers-v9 .combo { border: 1px solid var(--line, var(--hatch-widget-border, #ddd)); border-left: 4px solid var(--accent, var(--hatch-widget-accent, #0d6a4c)); border-radius: 10px; padding: 10px 12px; margin: 0 0 10px; background: var(--surface, var(--hatch-widget-surface, #fff));}
+.offers-v9 .combo h3 { margin: 0 0 4px;}
+.offers-v9 .combo .combo-why { color: var(--muted, var(--hatch-widget-muted, #666)); margin: 0 0 6px;}
+.offers-v9 .combo ul { margin: 4px 0; padding-left: 18px;}
+.offers-v9 .combo li { margin: 2px 0;}
+.offers-v9 .combo-total { font-weight: 700; margin: 6px 0 0;}
+.offers-v9 .mech-group { border: 1px solid var(--line, var(--hatch-widget-border, #ddd)); border-radius: 10px; padding: 0 12px 8px; margin: 0 0 12px; background: var(--surface, var(--hatch-widget-surface, #fff));}
+.offers-v9 .mech-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; border-bottom: 1px solid var(--line, var(--hatch-widget-border, #ddd)); padding: 8px 0 6px;}
+.offers-v9 .mech-head h3 { margin: 0; font-size: 14px;}
+.offers-v9 .mech-count { font-size: 12px; color: var(--muted, var(--hatch-widget-muted, #666)); white-space: nowrap;}
+.offers-v9 .mech-item { display: flex; gap: 8px; align-items: flex-start; padding: 8px 0; border-top: 1px solid var(--line, var(--hatch-widget-border, #ddd));}
+.offers-v9 .mech-item:first-of-type { border-top: none;}
+.offers-v9 .mech-item p { margin: 0; flex: 1; line-height: 1.6;}
+.offers-v9 .mech-item.muted p { color: var(--muted, var(--hatch-widget-muted, #666));}
+.offers-v9 .mech-chip { flex: none; font-size: 12px; line-height: 1.4; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft, var(--hatch-widget-surface-muted, #f5f5f5)); border: 1px solid var(--line, var(--hatch-widget-border, #ddd)); color: var(--accent, var(--hatch-widget-accent, #0d6a4c)); margin-top: 1px; white-space: nowrap;}
+.offers-v9 td .cat-pill { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px; background: var(--accent-soft, var(--hatch-widget-surface-muted, #f5f5f5)); border: 1px solid var(--line, var(--hatch-widget-border, #ddd)); white-space: nowrap;}
 </style>
 </head>
 <body>
@@ -246,7 +265,7 @@ footer.notes p { margin: 6px 0;}
 <button type="button" id="btnCopy24">複製文字</button>
 <button type="button" id="btnDl24">下載.txt</button>
 </div>
-<p class="view-note" id="viewNote24">兩個檢視內容相同：超市優惠 10 組，表格一 67 行。切去「文字」即可睇純文字。</p>
+<p class="view-note" id="viewNote24">兩個檢視內容相同：AI推薦組合 3 組，超市優惠 10 組，表格一 67 行。切去「文字」即可睇純文字。</p>
 <span class="copy-msg" id="copyMsg24" role="status"></span>
 </div>
 
@@ -265,6 +284,7 @@ footer.notes p { margin: 6px 0;}
 </div>
 <div class="offers-v9">
 <div class="filter-bar" id="offers-filter">
+<span class="filter-label">超市：</span>
 <button type="button" class="fbtn" data-filter="all" aria-pressed="true" onclick="setOffersFilter('all')">全部</button>
 <button type="button" class="fbtn" aria-pressed="false" data-filter="萬寧" onclick="setOffersFilter('萬寧')">萬寧</button>
 <button type="button" class="fbtn" aria-pressed="false" data-filter="百佳" onclick="setOffersFilter('百佳')">百佳</button>
@@ -277,176 +297,198 @@ footer.notes p { margin: 6px 0;}
 <button type="button" class="fbtn" aria-pressed="false" data-filter="city'super" onclick="setOffersFilter('city&#39;super')">city'super</button>
 <button type="button" class="fbtn" aria-pressed="false" data-filter="SOGO" onclick="setOffersFilter('SOGO')">SOGO</button>
 </div>
+<div class="filter-bar" id="offers-cat-filter">
+<span class="filter-label">類別：</span>
+<button type="button" class="fbtn" data-filter="all" aria-pressed="true" onclick="setOffersCategory('all')">全部</button>
+<button type="button" class="fbtn" aria-pressed="false" data-filter="食品" onclick="setOffersCategory('食品')">食品</button>
+<button type="button" class="fbtn" aria-pressed="false" data-filter="個人護理" onclick="setOffersCategory('個人護理')">個人護理</button>
+<button type="button" class="fbtn" aria-pressed="false" data-filter="家居" onclick="setOffersCategory('家居')">家居</button>
+<button type="button" class="fbtn" aria-pressed="false" data-filter="母嬰" onclick="setOffersCategory('母嬰')">母嬰</button>
+</div>
 <p class="filter-note" id="offers-filter-note">顯示全部平台</p>
+<div class="ai-combos" id="ai-combos">
+<h2>AI推薦組合</h2>
+<p class="note">每組都係同一個超市、同一張單結帳。網店限定同門市限定優惠唔可以合併，買之前睇清楚條款。</p>
+<div class="combo" data-platform="萬寧">
+<h3>組合 1：萬寧「今日出位」組合</h3>
+<p class="combo-why">Aveeno 今日出位價 $99，加舒適達買 4 送煎鍋，一次過買齊浴室用品。</p>
+<ul>
+<li>Aveeno 燕麥沐浴露 1000 毫升（任一口味） $99</li>
+<li>舒適達指定牙膏 × 4：$199.60（$49.90／支），送美亞煎鍋＋潔廁液</li>
+</ul>
+<p class="combo-total">合共 $298.60；參考價合共 $368.60，慳 $70.00。萬寧結帳，同一張發票。Aveeno 只限今日；舒適達至 11月26日。</p>
+</div>
+<div class="combo" data-platform="百佳">
+<h3>組合 2：百佳「本周精選」食品組合</h3>
+<p class="combo-why">卡樂B、香腸、水餃都係本周精選，零食加晚餐一次買齊。</p>
+<ul>
+<li>卡樂B薯片 90-105 克 $42／3 包</li>
+<li>尊遜牌香腸 360 克 $100／2 包</li>
+<li>灣仔碼頭水餃家庭裝 840 克 $51／包</li>
+</ul>
+<p class="combo-total">合共 $193.00；參考價合共 $261.00，慳 $68.00。百佳門市或 PNS 網購，同一張單。至 11月26日。</p>
+</div>
+<div class="combo" data-platform="惠康">
+<h3>組合 3：惠康「堅著數」甜品飲品組合</h3>
+<p class="combo-why">薑汁撞奶、雪米糍、豆乳、果汁都係惠康堅著數，下午茶組合。</p>
+<ul>
+<li>十字牌薑汁撞奶 200 毫升 $8</li>
+<li>維記 2 粒裝雪米糍 5 件 $29.6</li>
+<li>道地生豆乳 $8.5／支</li>
+<li>美國佛羅里達鮮榨果汁 1.5 公升 $62</li>
+</ul>
+<p class="combo-total">合共 $108.10；參考價合共 $151.90，慳 $43.80。惠康門市結帳（部分優惠唔適用於網店）。11月20日至11月26日。</p>
+</div>
+</div>
 <h2>超市優惠</h2>
 <div class="mech-group" data-platform="萬寧">
-<h3>萬寧</h3>
-<ul>
-<li>精選面膜產品買滿 $188 享 88 折（11月20日至11月27日）。</li>
-<li>精選女性衛生護理用品買 1 送 1。</li>
-<li>精選頭髮護理產品買第 2 件半價。</li>
-<li>美容產品買滿 $488 送 Häagen-Dazs Mini Café 雪糕火鍋禮券 1 張。</li>
-<li>AlipayHK 掃碼消費滿 $500 減 $50（至 11月30日）。</li>
-<li>網店新會員碼 WELCOME：滿 $388 減 $45。</li>
-</ul>
+<div class="mech-head"><h3>萬寧</h3><span class="mech-count">6 項優惠</span></div>
+<div class="mech-item"><span class="mech-chip">折扣</span><p>精選面膜產品買滿 <strong>$188</strong> 享 88 折（11月20日至11月27日）。</p></div>
+<div class="mech-item"><span class="mech-chip">買贈</span><p>精選女性衛生護理用品買 1 送 1。</p></div>
+<div class="mech-item"><span class="mech-chip">折扣</span><p>精選頭髮護理產品買第 2 件半價。</p></div>
+<div class="mech-item"><span class="mech-chip">滿額送</span><p>美容產品買滿 <strong>$488</strong> 送 Häagen-Dazs Mini Café 雪糕火鍋禮券 1 張。</p></div>
+<div class="mech-item"><span class="mech-chip">優惠碼</span><p>AlipayHK 掃碼消費滿 <strong>$500</strong> 減 <strong>$50</strong>（至 11月30日）。</p></div>
+<div class="mech-item"><span class="mech-chip">優惠碼</span><p>網店新會員碼 <strong>WELCOME</strong>：滿 <strong>$388</strong> 減 <strong>$45</strong>。</p></div>
 </div>
 <div class="mech-group" data-platform="百佳">
-<h3>百佳</h3>
-<ul>
-<li>西九龍中心新店開幕禮遇（11月23日至11月29日，只限西九龍中心百佳分店）：易賞錢會員買滿 $100 送史雲生清雞湯 1 公升裝 1 盒；買滿 $150 再送 Zespri 金奇異果 3 個；11月23日至25日新登記易賞錢會員送樂事原味薯片 28.3 克 1 包。</li>
-<li>網購碼（11月1日至11月30日，每單限用 1 個碼）：NOVHD11 滿 $600 享 92 折（最高減 $100）；NOVFREE11 滿 $350 免運費；NOVCNC11 落佳拎滿 $250 減 $20；NOVHDE11 快趣送滿 $250 減 $20；PNSAPP 首張 PNS App 訂單滿 $399 享 9 折及免運費。</li>
-<li>易賞錢 App 門市電子優惠券：買滿 $120 包 1 件佳之選減 $10；買滿 $200 減 $12。</li>
-<li>WeChat Pay HK：門市滿 $200 減 $20 券；充值滿 $1,000 送 $5 券。</li>
-<li>WAITROSE 產品滿 $100 送 $15 電子優惠券。</li>
-</ul>
+<div class="mech-head"><h3>百佳</h3><span class="mech-count">5 項優惠</span></div>
+<div class="mech-item"><span class="mech-chip">新店</span><p>西九龍中心新店開幕禮遇（11月23日至11月29日，只限西九龍中心百佳分店）：易賞錢會員買滿 <strong>$100</strong> 送史雲生清雞湯 1 公升裝 1 盒；買滿 <strong>$150</strong> 再送 Zespri 金奇異果 3 個；11月23日至25日新登記易賞錢會員送樂事原味薯片 28.3 克 1 包。</p></div>
+<div class="mech-item"><span class="mech-chip">優惠碼</span><p>網購碼（11月1日至11月30日，每單限用 1 個碼）：<strong>NOVHD11</strong> 滿 <strong>$600</strong> 享 92 折（最高減 <strong>$100</strong>）；<strong>NOVFREE11</strong> 滿 <strong>$350</strong> 免運費；<strong>NOVCNC11</strong> 落佳拎滿 <strong>$250</strong> 減 <strong>$20</strong>；<strong>NOVHDE11</strong> 快趣送滿 <strong>$250</strong> 減 <strong>$20</strong>；<strong>PNSAPP</strong> 首張 PNS App 訂單滿 <strong>$399</strong> 享 9 折及免運費。</p></div>
+<div class="mech-item"><span class="mech-chip">優惠券</span><p>易賞錢 App 門市電子優惠券：買滿 <strong>$120</strong> 包 1 件佳之選減 <strong>$10</strong>；買滿 <strong>$200</strong> 減 <strong>$12</strong>。</p></div>
+<div class="mech-item"><span class="mech-chip">滿額送</span><p>WeChat Pay HK：門市滿 <strong>$200</strong> 減 <strong>$20</strong> 券；充值滿 <strong>$1,000</strong> 送 <strong>$5</strong> 券。</p></div>
+<div class="mech-item"><span class="mech-chip">滿額送</span><p><strong>WAITROSE</strong> 產品滿 <strong>$100</strong> 送 <strong>$15</strong> 電子優惠券。</p></div>
 </div>
 <div class="mech-group" data-platform="惠康">
-<h3>惠康</h3>
-<ul>
-<li>雪糕雪條買 5 件或以上享 8 折（只限門市）。</li>
-<li>佳能／高樂氏指定產品買 2 件享 88 折；單一交易折實買滿 $138 送禮品（DoDoME 洗衣珠 25 粒裝＋得寶閃鑽 4 層衛生紙 10 卷裝＋Meadows 洗潔精 1.3 公升；贈品總值未能核實）。</li>
-<li>買 4 排道地茶類飲品送禮品（日清出前一丁麵＋Meadows 面紙＋道地紅茶；贈品總值未能核實）。</li>
-<li>foodpanda 碼 WELL10：滿 $350 享 9 折（最高減 $50，至 11月30日）。</li>
-<li>foodpanda 買滿 $350 免運費，掃貨賺 3 倍 yuu 分。</li>
-</ul>
+<div class="mech-head"><h3>惠康</h3><span class="mech-count">5 項優惠</span></div>
+<div class="mech-item"><span class="mech-chip">折扣</span><p>雪糕雪條買 5 件或以上享 8 折（只限門市）。</p></div>
+<div class="mech-item"><span class="mech-chip">滿額送</span><p>佳能／高樂氏指定產品買 2 件享 88 折；單一交易折實買滿 <strong>$138</strong> 送禮品（DoDoME 洗衣珠 25 粒裝＋得寶閃鑽 4 層衛生紙 10 卷裝＋Meadows 洗潔精 1.3 公升；贈品總值未能核實）。</p></div>
+<div class="mech-item"><span class="mech-chip">買贈</span><p>買 4 排道地茶類飲品送禮品（日清出前一丁麵＋Meadows 面紙＋道地紅茶；贈品總值未能核實）。</p></div>
+<div class="mech-item"><span class="mech-chip">優惠碼</span><p>foodpanda 碼 <strong>WELL10</strong>：滿 <strong>$350</strong> 享 9 折（最高減 <strong>$50</strong>，至 11月30日）。</p></div>
+<div class="mech-item"><span class="mech-chip">免運費</span><p>foodpanda 買滿 <strong>$350</strong> 免運費，掃貨賺 3 倍 yuu 分。</p></div>
 </div>
 <div class="mech-group" data-platform="HKTVmall">
-<h3>HKTVmall</h3>
-<ul>
-<li>碼 TUE8SALE：門市自取滿 $99 享額外 85 折。</li>
-<li>碼 2T88SALE：送貨上門滿 $699 享額外 88 折（11月24日至11月25日）。</li>
-<li>碼 MYSAVE50：滿 $350 減 $50（馬來西亞館，至 2027年1月31日）。</li>
-<li>新客碼 2026NOV50：滿 $200 減 $50。</li>
-</ul>
+<div class="mech-head"><h3>HKTVmall</h3><span class="mech-count">4 項優惠</span></div>
+<div class="mech-item"><span class="mech-chip">優惠碼</span><p>碼 <strong>TUE8SALE</strong>：門市自取滿 <strong>$99</strong> 享額外 85 折。</p></div>
+<div class="mech-item"><span class="mech-chip">優惠碼</span><p>碼 <strong>2T88SALE</strong>：送貨上門滿 <strong>$699</strong> 享額外 88 折（11月24日至11月25日）。</p></div>
+<div class="mech-item"><span class="mech-chip">優惠碼</span><p>碼 <strong>MYSAVE50</strong>：滿 <strong>$350</strong> 減 <strong>$50</strong>（馬來西亞館，至 2027年1月31日）。</p></div>
+<div class="mech-item"><span class="mech-chip">優惠碼</span><p>新客碼 <strong>2026NOV50</strong>：滿 <strong>$200</strong> 減 <strong>$50</strong>。</p></div>
 </div>
 <div class="mech-group" data-platform="AEON">
-<h3>AEON</h3>
-<ul>
-<li>會員購物滿 $800 送 $50 電子優惠券 1 張（使用期 12月7日至12月17日，每位會員限享 1 次）。</li>
-<li>買 BLACK FRIDAY 廣告商品滿 $300 免費換領多用途自黏收納布 1 個。</li>
-<li>買 BLACK FRIDAY 廣告商品賺 3 倍會員積分。</li>
-<li>網店碼（11月1日至11月27日，只限網上超市貨品，每單限用 1 個碼）：ACNOV49 滿 $599 減 $49；ACNOV99 滿 $999 減 $99；ACNOV219 滿 $1,999 減 $219。</li>
-</ul>
+<div class="mech-head"><h3>AEON</h3><span class="mech-count">4 項優惠</span></div>
+<div class="mech-item"><span class="mech-chip">滿額送</span><p>會員購物滿 <strong>$800</strong> 送 <strong>$50</strong> 電子優惠券 1 張（使用期 12月7日至12月17日，每位會員限享 1 次）。</p></div>
+<div class="mech-item"><span class="mech-chip">換領</span><p>買 <strong>BLACK</strong> <strong>FRIDAY</strong> 廣告商品滿 <strong>$300</strong> 免費換領多用途自黏收納布 1 個。</p></div>
+<div class="mech-item"><span class="mech-chip">積分</span><p>買 <strong>BLACK</strong> <strong>FRIDAY</strong> 廣告商品賺 3 倍會員積分。</p></div>
+<div class="mech-item"><span class="mech-chip">優惠碼</span><p>網店碼（11月1日至11月27日，只限網上超市貨品，每單限用 1 個碼）：<strong>ACNOV49</strong> 滿 <strong>$599</strong> 減 <strong>$49</strong>；<strong>ACNOV99</strong> 滿 <strong>$999</strong> 減 <strong>$99</strong>；<strong>ACNOV219</strong> 滿 <strong>$1,999</strong> 減 <strong>$219</strong>。</p></div>
 </div>
 <div class="mech-group" data-platform="屈臣氏">
-<h3>屈臣氏</h3>
-<ul>
-<li>碼 BLACK5：滿 $538 送維他蜜糖檸檬茶飲品及舒暢感受 B3 益生菌體驗裝。</li>
-<li>碼 DEAL950：滿 $950 送普樂氏多功能雙層迷你電蒸籠 3 公升、維他蘋果綠茶飲品原箱或得寶 4 層壓花袋裝面紙原箱（隨機發送 1 件）。</li>
-<li>網店優惠券：滿 $699 減 $80；滿 $388 減 $38（至 11月27日；只限網店及易賞錢會員，每單限用 1 個碼）。</li>
-</ul>
+<div class="mech-head"><h3>屈臣氏</h3><span class="mech-count">3 項優惠</span></div>
+<div class="mech-item"><span class="mech-chip">優惠碼</span><p>碼 <strong>BLACK5</strong>：滿 <strong>$538</strong> 送維他蜜糖檸檬茶飲品及舒暢感受 B3 益生菌體驗裝。</p></div>
+<div class="mech-item"><span class="mech-chip">優惠碼</span><p>碼 <strong>DEAL950</strong>：滿 <strong>$950</strong> 送普樂氏多功能雙層迷你電蒸籠 3 公升、維他蘋果綠茶飲品原箱或得寶 4 層壓花袋裝面紙原箱（隨機發送 1 件）。</p></div>
+<div class="mech-item"><span class="mech-chip">優惠碼</span><p>網店優惠券：滿 <strong>$699</strong> 減 <strong>$80</strong>；滿 <strong>$388</strong> 減 <strong>$38</strong>（至 11月27日；只限網店及易賞錢會員，每單限用 1 個碼）。</p></div>
 </div>
 <div class="mech-group" data-platform="DONKI">
-<h3>DON DON DONKI</h3>
-<ul>
-<li>指定玩具公仔買 2 件 88 折（11月10日至11月30日；不適用於 Pokémon 及 ONE PIECE 卡牌、Nintendo Switch、聖誕主題商品、Sanrio 螃蟹系列、公價及清貨）。</li>
-<li>安信 EarnMORE／WeWa 卡單筆滿 $300 回 $30（至 2027年2月28日；每人全期最高回 $60）。</li>
-<li>親臨分店登記 DONKI APP 新會員送迎新會員優惠券 1 張（至 11月30日）。</li>
-</ul>
+<div class="mech-head"><h3>DON DON DONKI</h3><span class="mech-count">3 項優惠</span></div>
+<div class="mech-item"><span class="mech-chip">折扣</span><p>指定玩具公仔買 2 件 88 折（11月10日至11月30日；不適用於 Pokémon 及 ONE <strong>PIECE</strong> 卡牌、Nintendo Switch、聖誕主題商品、Sanrio 螃蟹系列、公價及清貨）。</p></div>
+<div class="mech-item"><span class="mech-chip">回贈</span><p>安信 EarnMORE／WeWa 卡單筆滿 <strong>$300</strong> 回 <strong>$30</strong>（至 2027年2月28日；每人全期最高回 <strong>$60</strong>）。</p></div>
+<div class="mech-item"><span class="mech-chip">新會員</span><p>親臨分店登記 <strong>DONKI</strong> APP 新會員送迎新會員優惠券 1 張（至 11月30日）。</p></div>
 </div>
 <div class="mech-group" data-platform="759 阿信屋">
-<h3>759 阿信屋</h3>
-<ul>
-<li>勁「抵」價只限 11月24日至25日；產品及價錢未能核實（宣傳圖片未能讀取）。</li>
-<li>積分換領（11月1日至12月31日）：850 分起換梳打餅及 San Carlo 薯片；950 分換意粉醬及意大利粉。</li>
-<li>PayMe 掃碼領 $4 折扣券；店內購物折實滿 $100 可用（至 12月31日）。</li>
-</ul>
+<div class="mech-head"><h3>759 阿信屋</h3><span class="mech-count">3 項優惠</span></div>
+<div class="mech-item"><span class="mech-chip">折扣</span><p>勁「抵」價只限 11月24日至25日；產品及價錢未能核實（宣傳圖片未能讀取）。</p></div>
+<div class="mech-item"><span class="mech-chip">換領</span><p>積分換領（11月1日至12月31日）：850 分起換梳打餅及 San Carlo 薯片；950 分換意粉醬及意大利粉。</p></div>
+<div class="mech-item"><span class="mech-chip">優惠碼</span><p>PayMe 掃碼領 <strong>$4</strong> 折扣券；店內購物折實滿 <strong>$100</strong> 可用（至 12月31日）。</p></div>
 </div>
 <div class="mech-group" data-platform="city'super">
-<h3>city'super</h3>
-<ul>
-<li>Winterfest 會員購物日（11月24日至11月28日；11月24日只限 super e-gold 會員）：食品部低至 85 折；精選酒品低至 9 折，指定酒類滿 12 枝或以上 85 折；LOG-ON 低至 8 折；cafe 等低至 9 折；網上商店單一消費滿 $500 送 $50 網上商店電子優惠券 1 張（滿 $250 可用）；super e 會員單一消費滿 $2,000 送 $200 電子禮券 1 張。</li>
-</ul>
+<div class="mech-head"><h3>city'super</h3><span class="mech-count">1 項優惠</span></div>
+<div class="mech-item"><span class="mech-chip">滿額送</span><p>Winterfest 會員購物日（11月24日至11月28日；11月24日只限 super e-gold 會員）：食品部低至 85 折；精選酒品低至 9 折，指定酒類滿 12 枝或以上 85 折；LOG-ON 低至 8 折；cafe 等低至 9 折；網上商店單一消費滿 <strong>$500</strong> 送 <strong>$50</strong> 網上商店電子優惠券 1 張（滿 <strong>$250</strong> 可用）；super e 會員單一消費滿 <strong>$2,000</strong> 送 <strong>$200</strong> 電子禮券 1 張。</p></div>
 </div>
 <div class="mech-group" data-platform="SOGO">
-<h3>SOGO</h3>
-<ul>
-<li>今日無特別優惠（感謝祭已於 11 月 22 日結束）。</li>
-</ul>
+<div class="mech-head"><h3>SOGO</h3></div>
+<div class="mech-item muted"><p>今日無特別優惠（感謝祭已於 11 月 22 日結束）。</p></div>
 </div>
 <h2>表格一：個別優惠</h2>
-<p id="offers-no-rows" style="display:none;">呢個平台喺表格一無商品。</p>
+<p id="offers-no-rows" style="display:none;">無符合篩選條件嘅商品。</p>
 <div class="tbl-wrap">
 <table>
 <thead>
-<tr><th>平台</th><th>商品</th><th>優惠價</th><th>參考價</th><th>參考來源</th><th>期間</th><th>條款</th></tr>
+<tr><th>平台</th><th>類別</th><th>商品</th><th>優惠價</th><th>參考價</th><th>參考來源</th><th>期間</th><th>條款</th></tr>
 </thead>
 <tbody>
-<tr class="group" data-platform="萬寧"><td colspan="7">萬寧 — 買 1 送 1 及買 2 送 1 以價錢較低 1 件免費計；贈品每發票計，送完即止；數量有限，售完即止。</td></tr>
-<tr data-platform="萬寧"><td>萬寧</td><td>Aveeno 燕麥清新西柚沐浴露 1000 毫升 ＜清新西柚／薰衣草舒壓／（原味）／高效舒緩＞</td><td class="num">$99</td><td>$169（屈臣氏）<br><small>原味：$125（HKTVmall，平行進口）</small></td><td>Watsons網店-2026/11/19；原味 HKTVmall-2026/11/21</td><td>只限 11月24日</td><td>每人限買 24 件；優惠門店同步；不可與其他優惠同時使用</td></tr>
-<tr data-platform="萬寧"><td>萬寧</td><td>Physiogel 潔美淨膠原再生精華凝膠面膜 27 克 x 4 片</td><td class="num">$299 買 1 送 1</td><td>未能核實</td><td>只有萬寧自身價錢</td><td>11月20日至11月26日</td><td>買 1 送 1 以價錢較低 1 件免費計</td></tr>
-<tr data-platform="萬寧"><td>萬寧</td><td>Torriden 桃瑞丹 5D 微分子玻尿酸保濕面膜限量套裝（13 片 + 1 片）</td><td class="num">$195 買 2 送 1</td><td>未能核實</td><td>只有萬寧自身價錢</td><td>11月20日至11月26日</td><td>買 2 送 1 以價錢較低 1 件免費計</td></tr>
-<tr data-platform="萬寧"><td>萬寧</td><td>舒適達指定牙膏</td><td>買 4 件送美亞 Prestige 25 厘米易潔煎鍋 1 件及詩樂氏多效消毒潔廁液 500 毫升 1 件；買 6 件再送鴻福堂現金券 $50 2 張；滿 $399 再送萬寧 $50 電子現金券 1 張<br><small>贈品總值：未能核實</small></td><td>$49.90／支（萬寧，自家價）</td><td>萬寧網店-2026/11/23</td><td>11月20日至11月26日</td><td>贈品每發票計，送完即止</td></tr>
-<tr class="group" data-platform="百佳"><td colspan="7">百佳 — 適用於大部分百佳、FUSION、TASTE、INTERNATIONAL 及 PNS 網購；不適用於百佳快閃特賣場及 TASTE x FRESH；以每張發票計算；數量有限，售完即止。</td></tr>
-<tr data-platform="百佳"><td>百佳</td><td>SELECT 佳之選急凍冰島有皮三文魚柳（ASC）240 克</td><td class="num">$48／包</td><td>$45.90（ParknShop 網購，自家價）</td><td>PNS網店-2026/11/23</td><td>至 11月26日</td><td>—</td></tr>
-<tr data-platform="百佳"><td>百佳</td><td>卡樂B薯片 90-105 克各款</td><td>$42／3 包<br><small>3 件比較：優惠總價 $42；參考總價 $66（惠康 $22 × 3）</small></td><td>$22／包（惠康）</td><td>惠康網店-2026/11/23</td><td>至 11月26日</td><td>—</td></tr>
-<tr data-platform="百佳"><td>百佳</td><td>維他奶豆奶／麥精飲品 250 毫升 6 包裝各款</td><td>$50／3 排<br><small>3 件比較：優惠總價 $50；參考總價 $60（屈臣氏 $20 × 3）</small></td><td>$20／排（屈臣氏）</td><td>Watsons網店-2026/11/21</td><td>至 11月26日</td><td>—</td></tr>
-<tr data-platform="百佳"><td>百佳</td><td>巴西雞中翼 2 磅裝</td><td class="num">$79／2 包</td><td>未能核實</td><td>SELECT自家品牌</td><td>至 11月26日</td><td>—</td></tr>
-<tr data-platform="百佳"><td>百佳</td><td>生油球急凍火雞 10–14 磅裝</td><td class="num">$388／件</td><td>未能核實</td><td>重量帶／品牌唔同</td><td>至 11月26日</td><td>—</td></tr>
-<tr data-platform="百佳"><td>百佳</td><td>尊遜牌香腸 360 克裝</td><td class="num">$100／2 包</td><td>$72（惠康）</td><td>惠康網店-2026/11/21</td><td>至 11月26日</td><td>—</td></tr>
-<tr data-platform="百佳"><td>百佳</td><td>灣仔碼頭水餃家庭裝 840 克</td><td class="num">$51／包</td><td>$51.00（惠康，同優惠價一樣）</td><td>惠康網店-2026/11/22</td><td>至 11月26日</td><td>—</td></tr>
-<tr data-platform="百佳"><td>百佳</td><td>富有柿（韓國）</td><td class="num">$12.9／3 個</td><td>未能核實</td><td>只有百佳自身價錢</td><td>至 11月26日</td><td>—</td></tr>
-<tr data-platform="百佳"><td>百佳</td><td>多菜多益水餃 8 至 20 隻裝各款</td><td>任選 2 包 $32，易賞價會員第 3 包加 $10</td><td>未能核實</td><td>其他平台價錢出窗口</td><td>至 11月26日</td><td>—</td></tr>
-<tr data-platform="百佳"><td>百佳</td><td>維他奶山水豆漿 946 毫升</td><td>買 2 盒送 1 盒山水鮮豆漿 236 毫升</td><td>未能核實</td><td>惠康優惠出窗口</td><td>至 11月26日</td><td>—</td></tr>
-<tr data-platform="百佳"><td>百佳</td><td>每日鮮語冷凍牛奶</td><td>買滿 $50 減 $5</td><td>未能核實</td><td>品種／容量未指明，無法對應</td><td>至 11月26日</td><td>—</td></tr>
-<tr data-platform="百佳"><td>百佳</td><td>淳·茶舍無糖茶 250 毫升 6 包裝 1 排</td><td>買任何產品滿 $100，加 $10 換 1 排</td><td>$16／排（屈臣氏）</td><td>Watsons網店-2026/11/23</td><td>至 11月26日</td><td>換購以每張發票計算；初生嬰兒奶粉、贈品及換購品除外</td></tr>
-<tr data-platform="百佳"><td>百佳</td><td>唯潔雅極致棉柔抽取式面紙 5 包裝 2 排</td><td>加 $26 換 2 排<br><small>2 件比較：優惠總價 $26；參考總價 $40（屈臣氏 $20 × 2）</small></td><td>$20／排（屈臣氏）</td><td>Watsons網店-2026/11/23</td><td>至 11月26日</td><td>換購以每張發票計算</td></tr>
-<tr data-platform="百佳"><td>百佳</td><td>袋裝牛油果 6 個裝 1 袋</td><td>加 $32 換 1 袋</td><td>$42（百佳，自家價）</td><td>PNS網店-2026/11/23</td><td>至 11月26日</td><td>換購以每張發票計算</td></tr>
-<tr data-platform="百佳"><td>百佳</td><td>長城牌火腿豬肉 340 克 2 罐</td><td>加 $38 換 2 罐<br><small>2 件比較：優惠總價 $38；參考總價 $54（百佳 $27 × 2）</small></td><td>$27／罐（百佳／惠康）</td><td>惠康網店-2026/11/23</td><td>至 11月26日</td><td>換購以每張發票計算</td></tr>
-<tr data-platform="百佳"><td>百佳</td><td>高露潔全效專業護齦牙膏 110 克</td><td>買 8 支送 Home Deluxe 行李箱 24 吋 1 件<br><small>贈品總值：未能核實（店方標示價值 $999 未經核實）</small></td><td>未能核實</td><td>買 8 支送贈品，無單件價</td><td>至 11月26日</td><td>贈品數量有限，送完即止</td></tr>
-<tr data-platform="百佳"><td>百佳</td><td>屈臣氏蒸餾水品牌常溫或冷凍飲品</td><td>買滿 $65 送屈臣氏礦物質有氣水 6 罐裝、史雲生清雞湯（澳洲版）1 公升及淘大特級蠔油 555 克<br><small>贈品總值：未能核實</small></td><td>未能核實</td><td>滿額送禮，無單件價</td><td>至 11月26日</td><td>只限 PNS 網購；贈品數量有限，送完即止</td></tr>
-<tr data-platform="百佳"><td>百佳</td><td>屈臣氏蒸餾水（旗艦店）</td><td>滿 $180 送電解質運動飲品 500 毫升 2 件；滿 $220 加送 IF 茉莉香米味椰青水 350 毫升 2 件<br><small>贈品總值：未能核實</small></td><td>未能核實</td><td>滿額送禮，無單件價</td><td>至 11月26日</td><td>只限 PNS 網購</td></tr>
-<tr class="group" data-platform="惠康"><td colspan="7">惠康 — 部分貨品只限指定分店；數量有限，售完即止。</td></tr>
-<tr data-platform="惠康"><td>惠康</td><td>筒裝珍寶藍桑子 200 克</td><td class="num">$28／件，2 件 $52</td><td>未能核實</td><td>只有惠康自身價錢</td><td>11月23日至11月26日</td><td>部分優惠不適用於惠康網店、Market Place 網店及 yuu 網購</td></tr>
-<tr data-platform="惠康"><td>惠康</td><td>藍桑子 125 克</td><td class="num">$16／件，3 件 $33</td><td>$11（萬寧）</td><td>Facebook帖文-2026/11/23</td><td>11月23日至11月26日</td><td>部分優惠不適用於惠康網店、Market Place 網店及 yuu 網購</td></tr>
-<tr data-platform="惠康"><td>惠康</td><td>阿牧特急凍精制羊肉片 300 克</td><td class="num">$79.9／件</td><td>未能核實</td><td>只有惠康／foodpanda自身價錢</td><td>11月23日至11月26日</td><td>—</td></tr>
-<tr data-platform="惠康"><td>惠康</td><td>思念牌小籠包 450 克</td><td class="num">$22.9／件</td><td>未能核實</td><td>只有惠康自身價錢</td><td>11月23日至11月26日</td><td>—</td></tr>
-<tr data-platform="惠康"><td>惠康</td><td>思念豬肉灌湯小籠包 150 克 ＜豬肉／雞肉＞</td><td>$21.9／件，2 件 $20<br><small>2 件比較：未能核實</small></td><td>未能核實</td><td>只有惠康自身價錢</td><td>11月23日至11月26日</td><td>—</td></tr>
-<tr data-platform="惠康"><td>惠康</td><td>All The Ugly Cookie 杜拜煙韌曲奇</td><td class="num">$29.9／件</td><td>未能核實</td><td>惠康獨家</td><td>11月20日至11月26日</td><td>部分貨品只限指定分店</td></tr>
-<tr data-platform="惠康"><td>惠康</td><td>十字牌薑汁撞奶 200 毫升</td><td class="num">$8／件</td><td>$9.90（HKTVmall）</td><td>HKTVmall官方帖文-2026/11/19</td><td>11月20日至11月26日</td><td>—</td></tr>
-<tr data-platform="惠康"><td>惠康</td><td>維記 2 粒裝雪米糍</td><td>5 件 $29.6<br><small>5 件比較：優惠總價 $29.6；參考總價 $70（惠康 $14 × 5）</small></td><td>$14／包（惠康網購，自家價）</td><td>惠康網店-2026/11/23</td><td>11月20日至11月26日</td><td>—</td></tr>
-<tr data-platform="惠康"><td>惠康</td><td>美國佛羅里達鮮榨果汁 1.5 公升</td><td class="num">$62／盒</td><td>$63（city'super）</td><td>city'super網店-2026/11/23</td><td>11月20日至11月26日</td><td>—</td></tr>
-<tr data-platform="惠康"><td>惠康</td><td>道地五黑生豆乳／生豆乳</td><td class="num">$8.5／支</td><td>$9（屈臣氏）</td><td>Watsons網店-2026/11/19</td><td>11月20日至11月26日</td><td>—</td></tr>
-<tr data-platform="惠康"><td>惠康</td><td>寶礦力水特 350 毫升 8 支裝加 ASICS 聯乘運動鞋袋</td><td class="num">$44.5／件</td><td>$44.40（HKTVmall）</td><td>HKTVmall-2026/11/23</td><td>11月20日至11月26日</td><td>—</td></tr>
-<tr data-platform="惠康"><td>惠康</td><td>阿牧特急凍精制羊肉片 300 克（foodpanda pandapro 會員）</td><td class="num">$79.9／件</td><td>未能核實</td><td>只有惠康／foodpanda自身價錢</td><td>11月20日至11月26日</td><td>只限 foodpanda 惠康 pandapro 會員</td></tr>
-<tr data-platform="惠康"><td>惠康</td><td>日本北海道急凍帶子 255 克（foodpanda pandapro 會員）</td><td class="num">$69／包</td><td>未能核實</td><td>只有惠康自身價錢</td><td>11月20日至11月26日</td><td>只限 foodpanda 惠康 pandapro 會員</td></tr>
-<tr data-platform="惠康"><td>惠康</td><td>生力清啤罐裝 4 x 500 毫升（foodpanda pandapro 會員）</td><td class="num">$27／盒</td><td>未能核實</td><td>只有惠康自身價錢</td><td>11月20日至11月26日</td><td>只限 foodpanda 惠康 pandapro 會員</td></tr>
-<tr class="group" data-platform="HKTVmall"><td colspan="7">HKTVmall</td></tr>
-<tr data-platform="HKTVmall"><td>HKTVmall</td><td>Gemini 電熱水壺（加 $185 換購，碼 GMIHK185）</td><td>加 $185 換購</td><td>$438（HKTVmall，自家標示價值）</td><td>HKTVmall-2026/11/23</td><td>至 11月30日</td><td>HKTVmall 每次付款只可用 1 個碼</td></tr>
-<tr class="group" data-platform="AEON"><td colspan="7">AEON — 部分貨品只限指定分店；數量有限，售完即止。</td></tr>
-<tr data-platform="AEON"><td>AEON</td><td>Häagen-Dazs 加賀棒焙茶拿鐵雪糕迷你杯 110 毫升</td><td class="num">$19.5</td><td>未能核實</td><td>AEON獨家口味</td><td>11月20日至12月6日</td><td>—</td></tr>
-<tr data-platform="AEON"><td>AEON</td><td>大拖羅三文魚壽司</td><td class="num">$89</td><td>未能核實</td><td>AEON獨家即製</td><td>11月20日至12月6日</td><td>不適用於旺角、九龍灣、大窩口、尖沙咀店及中島水產</td></tr>
-<tr data-platform="AEON"><td>AEON</td><td>BRAUN 空氣炸鍋 HF3000</td><td class="num">$499</td><td>未能核實</td><td>範圍內平台無現價（品牌官網$648不計）</td><td>11月20日至12月6日</td><td>—</td></tr>
-<tr data-platform="AEON"><td>AEON</td><td>TOPVALU 24 吋行李喼（備杯架及 TSA 海關鎖）</td><td class="num">$349.5</td><td>未能核實</td><td>AEON自家品牌</td><td>11月20日至12月6日</td><td>不適用於旺角、油塘、啟德及將軍澳店</td></tr>
-<tr data-platform="AEON"><td>AEON</td><td>HÓME CÓORDY 午睡枕（內含毛氈）</td><td class="num">$99</td><td>未能核實</td><td>AEON自家品牌</td><td>11月20日至12月6日</td><td>不適用於啟德店</td></tr>
-<tr data-platform="AEON"><td>AEON</td><td>GB POCKIT+ ALL-TERRAIN 手推車</td><td class="num">$1,599</td><td>未能核實</td><td>其他平台無相同型號</td><td>11月20日至12月6日</td><td>—</td></tr>
-<tr data-platform="AEON"><td>AEON</td><td>美酒福車（4 支酒）</td><td>$399<br><small>店方標示總值 $575 未經核實</small></td><td>未能核實</td><td>相同組合只由AEON發售</td><td>11月20日至12月6日</td><td>福車數量有限，送完即止</td></tr>
-<tr data-platform="AEON"><td>AEON</td><td>HÓME CÓORDY 廚具福車（2 件鍋）</td><td>$189<br><small>店方標示總值 $278.9 未經核實</small></td><td>未能核實</td><td>相同組合只由AEON發售</td><td>11月20日至12月6日</td><td>福車數量有限，送完即止</td></tr>
-<tr data-platform="AEON"><td>AEON</td><td>Gregory 精選休閒袋指定款式</td><td class="num">6 折</td><td>未能核實</td><td>無價錢</td><td>11月20日至12月6日</td><td>—</td></tr>
-<tr class="group" data-platform="屈臣氏"><td colspan="7">屈臣氏</td></tr>
-<tr data-platform="屈臣氏"><td>屈臣氏</td><td>荷蘭美素佳兒金裝 3 號 1200 克</td><td>$399／罐，第 2 件半價，買 2 件 $598.50<br><small>2 件比較：優惠總價 $598.50；參考總價 $840（萬寧 $420 × 2）</small></td><td>$420／罐（萬寧）</td><td>Mannings網店-2026/11/24</td><td>11月13日至11月26日</td><td>適用於屈臣氏網店及門市；不包括初生嬰兒配方奶粉</td></tr>
-<tr data-platform="屈臣氏"><td>屈臣氏</td><td>ATORREGE AD+ 深層保濕精華 30ml</td><td class="num">$290</td><td>$312（萬寧）</td><td>Mannings網店-2026/11/24</td><td>11月13日至12月3日</td><td>只限屈臣氏網店</td></tr>
-<tr data-platform="屈臣氏"><td>屈臣氏</td><td>OLAY 胜肽專研緊緻淡紋精華輕潤霜套裝（乳霜 50g＋眼霜 5g＋精華 14ml）</td><td class="num">$319</td><td>$278（HKTVmall，平行進口）</td><td>HKTVmall-2026/11/24</td><td>11月13日至12月3日</td><td>只限屈臣氏網店</td></tr>
-<tr data-platform="屈臣氏"><td>屈臣氏</td><td>Whisper 甜睡瞬潔 32 厘米 12 片孖裝</td><td class="num">75 折</td><td>未能核實</td><td>無價錢</td><td>11月13日至12月3日</td><td>只限屈臣氏網店</td></tr>
-<tr class="group" data-platform="759 阿信屋"><td colspan="7">759 阿信屋 — 店舖庫存各異，貨品數量有限，售完即止。</td></tr>
-<tr data-platform="759 阿信屋"><td>759 阿信屋</td><td>OVATION 法式羊架 16 支骨 900 克以上</td><td class="num">$320</td><td>未能核實</td><td>759直送品牌</td><td>11月23日至12月6日</td><td>—</td></tr>
-<tr data-platform="759 阿信屋"><td>759 阿信屋</td><td>OVATION 法式羊架 1000 克以上</td><td class="num">$360</td><td>未能核實</td><td>759直送品牌</td><td>11月23日至12月6日</td><td>—</td></tr>
-<tr data-platform="759 阿信屋"><td>759 阿信屋</td><td>OVATION 法式羊架 1100 克以上</td><td class="num">$380</td><td>未能核實</td><td>759直送品牌</td><td>11月23日至12月6日</td><td>—</td></tr>
-<tr data-platform="759 阿信屋"><td>759 阿信屋</td><td>SUPREME 無激素香雞穀飼全雞 1.0 公斤以上</td><td class="num">$43.8</td><td>未能核實</td><td>759自家品牌</td><td>11月23日至12月6日</td><td>—</td></tr>
-<tr data-platform="759 阿信屋"><td>759 阿信屋</td><td>SUPREME 無激素香雞穀飼全雞 700 克 2 件</td><td class="num">$62.8</td><td>未能核實</td><td>759自家品牌</td><td>11月23日至12月6日</td><td>—</td></tr>
-<tr data-platform="759 阿信屋"><td>759 阿信屋</td><td>SUPREME 法國雞肉腸原味 340 克 2 件</td><td class="num">$19.8</td><td>未能核實</td><td>759自家品牌</td><td>11月23日至12月6日</td><td>—</td></tr>
-<tr data-platform="759 阿信屋"><td>759 阿信屋</td><td>SUPREME 法國雞肉腸芝士味 340 克 2 件</td><td class="num">$21.8</td><td>未能核實</td><td>759自家品牌</td><td>11月23日至12月6日</td><td>—</td></tr>
-<tr data-platform="759 阿信屋"><td>759 阿信屋</td><td>759 精選日式烤雞串系列 240 克 2 件</td><td class="num">$46</td><td>未能核實</td><td>759自家精選</td><td>11月23日至12月6日</td><td>—</td></tr>
-<tr data-platform="759 阿信屋"><td>759 阿信屋</td><td>Espana 手切 100% 伊比利亞黑毛豬火腿（風乾 24 個月）50 克</td><td class="num">$124</td><td>未能核實</td><td>759獨家品牌</td><td>11月23日至12月6日</td><td>—</td></tr>
-<tr data-platform="759 阿信屋"><td>759 阿信屋</td><td>Espana 手切伊比利亞火腿 90 克</td><td class="num">$89</td><td>未能核實</td><td>759獨家品牌</td><td>11月23日至12月6日</td><td>—</td></tr>
-<tr data-platform="759 阿信屋"><td>759 阿信屋</td><td>WorldFood 意式芝士雞肉薄餅 ＜芝士雞肉／烤牛肉／蘑菇芝士＞</td><td class="num">$38</td><td>未能核實</td><td>759自家品牌</td><td>11月23日至12月6日</td><td>—</td></tr>
-<tr data-platform="759 阿信屋"><td>759 阿信屋</td><td>MALTESES 聖誕倒數日曆牛奶朱古力 108 克</td><td class="num">$32.9</td><td>未能核實</td><td>範圍內平台無相同產品</td><td>11月23日至12月6日</td><td>—</td></tr>
-<tr data-platform="759 阿信屋"><td>759 阿信屋</td><td>Kinder 巧克力聖誕倒數日曆</td><td class="num">$58</td><td>未能核實</td><td>尺寸未能確認</td><td>11月23日至12月6日</td><td>—</td></tr>
-<tr class="group" data-platform="city'super"><td colspan="7">city'super</td></tr>
-<tr data-platform="city'super"><td>city'super</td><td>P01 鮑魚盆菜（4 人）</td><td>$1,159.2（正價 $1,288，9 折）</td><td>未能核實</td><td>city'super獨家</td><td>11月16日至12月7日；售賣期至 12月19日中午 12 時</td><td>只限 city'super 會員；9 折未反映在網店標價內</td></tr>
-<tr data-platform="city'super"><td>city'super</td><td>P02 鮑魚盆菜（6 人）</td><td>$1,699.2（正價 $1,888，9 折）</td><td>未能核實</td><td>city'super獨家</td><td>11月16日至12月7日；售賣期至 12月19日中午 12 時</td><td>只限 city'super 會員；9 折未反映在網店標價內</td></tr>
-<tr data-platform="city'super"><td>city'super</td><td>P03 鮑魚盆菜（12 人）</td><td>$2,689.2（正價 $2,988，9 折）</td><td>未能核實</td><td>city'super獨家</td><td>11月16日至12月7日；售賣期至 12月19日中午 12 時</td><td>只限 city'super 會員；9 折未反映在網店標價內</td></tr>
-<tr data-platform="city'super"><td>city'super</td><td>Foodie Wonderland Elite Feast Pass（22 張體驗券）</td><td>$399（原價 $480）</td><td>未能核實</td><td>city'super獨家</td><td>早鳥期至 11月28日下午 6 時；活動日 11月29日</td><td>只限 11月29日於 city'super 國際金融中心商場店使用；名額有限，售完即止</td></tr>
+<tr class="group" data-platform="萬寧"><td colspan="8">萬寧 — 買 1 送 1 及買 2 送 1 以價錢較低 1 件免費計；贈品每發票計，送完即止；數量有限，售完即止。</td></tr>
+<tr data-platform="萬寧" data-category="個人護理"><td>萬寧</td><td><span class="cat-pill">個人護理</span></td><td>Aveeno 燕麥清新西柚沐浴露 1000 毫升 ＜清新西柚／薰衣草舒壓／（原味）／高效舒緩＞</td><td class="num">$99</td><td>$169（屈臣氏）<br><small>原味：$125（HKTVmall，平行進口）</small></td><td>Watsons網店-2026/11/19；原味 HKTVmall-2026/11/21</td><td>只限 11月24日</td><td>每人限買 24 件；優惠門店同步；不可與其他優惠同時使用</td></tr>
+<tr data-platform="萬寧" data-category="個人護理"><td>萬寧</td><td><span class="cat-pill">個人護理</span></td><td>Physiogel 潔美淨膠原再生精華凝膠面膜 27 克 x 4 片</td><td class="num">$299 買 1 送 1</td><td>未能核實</td><td>只有萬寧自身價錢</td><td>11月20日至11月26日</td><td>買 1 送 1 以價錢較低 1 件免費計</td></tr>
+<tr data-platform="萬寧" data-category="個人護理"><td>萬寧</td><td><span class="cat-pill">個人護理</span></td><td>Torriden 桃瑞丹 5D 微分子玻尿酸保濕面膜限量套裝（13 片 + 1 片）</td><td class="num">$195 買 2 送 1</td><td>未能核實</td><td>只有萬寧自身價錢</td><td>11月20日至11月26日</td><td>買 2 送 1 以價錢較低 1 件免費計</td></tr>
+<tr data-platform="萬寧" data-category="個人護理"><td>萬寧</td><td><span class="cat-pill">個人護理</span></td><td>舒適達指定牙膏</td><td>買 4 件送美亞 Prestige 25 厘米易潔煎鍋 1 件及詩樂氏多效消毒潔廁液 500 毫升 1 件；買 6 件再送鴻福堂現金券 $50 2 張；滿 $399 再送萬寧 $50 電子現金券 1 張<br><small>贈品總值：未能核實</small></td><td>$49.90／支（萬寧，自家價）</td><td>萬寧網店-2026/11/23</td><td>11月20日至11月26日</td><td>贈品每發票計，送完即止</td></tr>
+<tr class="group" data-platform="百佳"><td colspan="8">百佳 — 適用於大部分百佳、FUSION、TASTE、INTERNATIONAL 及 PNS 網購；不適用於百佳快閃特賣場及 TASTE x FRESH；以每張發票計算；數量有限，售完即止。</td></tr>
+<tr data-platform="百佳" data-category="食品"><td>百佳</td><td><span class="cat-pill">食品</span></td><td>SELECT 佳之選急凍冰島有皮三文魚柳（ASC）240 克</td><td class="num">$48／包</td><td>$45.90（ParknShop 網購，自家價）</td><td>PNS網店-2026/11/23</td><td>至 11月26日</td><td>—</td></tr>
+<tr data-platform="百佳" data-category="食品"><td>百佳</td><td><span class="cat-pill">食品</span></td><td>卡樂B薯片 90-105 克各款</td><td>$42／3 包<br><small>3 件比較：優惠總價 $42；參考總價 $66（惠康 $22 × 3）</small></td><td>$22／包（惠康）</td><td>惠康網店-2026/11/23</td><td>至 11月26日</td><td>—</td></tr>
+<tr data-platform="百佳" data-category="食品"><td>百佳</td><td><span class="cat-pill">食品</span></td><td>維他奶豆奶／麥精飲品 250 毫升 6 包裝各款</td><td>$50／3 排<br><small>3 件比較：優惠總價 $50；參考總價 $60（屈臣氏 $20 × 3）</small></td><td>$20／排（屈臣氏）</td><td>Watsons網店-2026/11/21</td><td>至 11月26日</td><td>—</td></tr>
+<tr data-platform="百佳" data-category="食品"><td>百佳</td><td><span class="cat-pill">食品</span></td><td>巴西雞中翼 2 磅裝</td><td class="num">$79／2 包</td><td>未能核實</td><td>SELECT自家品牌</td><td>至 11月26日</td><td>—</td></tr>
+<tr data-platform="百佳" data-category="食品"><td>百佳</td><td><span class="cat-pill">食品</span></td><td>生油球急凍火雞 10–14 磅裝</td><td class="num">$388／件</td><td>未能核實</td><td>重量帶／品牌唔同</td><td>至 11月26日</td><td>—</td></tr>
+<tr data-platform="百佳" data-category="食品"><td>百佳</td><td><span class="cat-pill">食品</span></td><td>尊遜牌香腸 360 克裝</td><td class="num">$100／2 包</td><td>$72（惠康）</td><td>惠康網店-2026/11/21</td><td>至 11月26日</td><td>—</td></tr>
+<tr data-platform="百佳" data-category="食品"><td>百佳</td><td><span class="cat-pill">食品</span></td><td>灣仔碼頭水餃家庭裝 840 克</td><td class="num">$51／包</td><td>$51.00（惠康，同優惠價一樣）</td><td>惠康網店-2026/11/22</td><td>至 11月26日</td><td>—</td></tr>
+<tr data-platform="百佳" data-category="食品"><td>百佳</td><td><span class="cat-pill">食品</span></td><td>富有柿（韓國）</td><td class="num">$12.9／3 個</td><td>未能核實</td><td>只有百佳自身價錢</td><td>至 11月26日</td><td>—</td></tr>
+<tr data-platform="百佳" data-category="食品"><td>百佳</td><td><span class="cat-pill">食品</span></td><td>多菜多益水餃 8 至 20 隻裝各款</td><td>任選 2 包 $32，易賞價會員第 3 包加 $10</td><td>未能核實</td><td>其他平台價錢出窗口</td><td>至 11月26日</td><td>—</td></tr>
+<tr data-platform="百佳" data-category="食品"><td>百佳</td><td><span class="cat-pill">食品</span></td><td>維他奶山水豆漿 946 毫升</td><td>買 2 盒送 1 盒山水鮮豆漿 236 毫升</td><td>未能核實</td><td>惠康優惠出窗口</td><td>至 11月26日</td><td>—</td></tr>
+<tr data-platform="百佳" data-category="食品"><td>百佳</td><td><span class="cat-pill">食品</span></td><td>每日鮮語冷凍牛奶</td><td>買滿 $50 減 $5</td><td>未能核實</td><td>品種／容量未指明，無法對應</td><td>至 11月26日</td><td>—</td></tr>
+<tr data-platform="百佳" data-category="食品"><td>百佳</td><td><span class="cat-pill">食品</span></td><td>淳·茶舍無糖茶 250 毫升 6 包裝 1 排</td><td>買任何產品滿 $100，加 $10 換 1 排</td><td>$16／排（屈臣氏）</td><td>Watsons網店-2026/11/23</td><td>至 11月26日</td><td>換購以每張發票計算；初生嬰兒奶粉、贈品及換購品除外</td></tr>
+<tr data-platform="百佳" data-category="家居"><td>百佳</td><td><span class="cat-pill">家居</span></td><td>唯潔雅極致棉柔抽取式面紙 5 包裝 2 排</td><td>加 $26 換 2 排<br><small>2 件比較：優惠總價 $26；參考總價 $40（屈臣氏 $20 × 2）</small></td><td>$20／排（屈臣氏）</td><td>Watsons網店-2026/11/23</td><td>至 11月26日</td><td>換購以每張發票計算</td></tr>
+<tr data-platform="百佳" data-category="食品"><td>百佳</td><td><span class="cat-pill">食品</span></td><td>袋裝牛油果 6 個裝 1 袋</td><td>加 $32 換 1 袋</td><td>$42（百佳，自家價）</td><td>PNS網店-2026/11/23</td><td>至 11月26日</td><td>換購以每張發票計算</td></tr>
+<tr data-platform="百佳" data-category="食品"><td>百佳</td><td><span class="cat-pill">食品</span></td><td>長城牌火腿豬肉 340 克 2 罐</td><td>加 $38 換 2 罐<br><small>2 件比較：優惠總價 $38；參考總價 $54（百佳 $27 × 2）</small></td><td>$27／罐（百佳／惠康）</td><td>惠康網店-2026/11/23</td><td>至 11月26日</td><td>換購以每張發票計算</td></tr>
+<tr data-platform="百佳" data-category="個人護理"><td>百佳</td><td><span class="cat-pill">個人護理</span></td><td>高露潔全效專業護齦牙膏 110 克</td><td>買 8 支送 Home Deluxe 行李箱 24 吋 1 件<br><small>贈品總值：未能核實（店方標示價值 $999 未經核實）</small></td><td>未能核實</td><td>買 8 支送贈品，無單件價</td><td>至 11月26日</td><td>贈品數量有限，送完即止</td></tr>
+<tr data-platform="百佳" data-category="食品"><td>百佳</td><td><span class="cat-pill">食品</span></td><td>屈臣氏蒸餾水品牌常溫或冷凍飲品</td><td>買滿 $65 送屈臣氏礦物質有氣水 6 罐裝、史雲生清雞湯（澳洲版）1 公升及淘大特級蠔油 555 克<br><small>贈品總值：未能核實</small></td><td>未能核實</td><td>滿額送禮，無單件價</td><td>至 11月26日</td><td>只限 PNS 網購；贈品數量有限，送完即止</td></tr>
+<tr data-platform="百佳" data-category="食品"><td>百佳</td><td><span class="cat-pill">食品</span></td><td>屈臣氏蒸餾水（旗艦店）</td><td>滿 $180 送電解質運動飲品 500 毫升 2 件；滿 $220 加送 IF 茉莉香米味椰青水 350 毫升 2 件<br><small>贈品總值：未能核實</small></td><td>未能核實</td><td>滿額送禮，無單件價</td><td>至 11月26日</td><td>只限 PNS 網購</td></tr>
+<tr class="group" data-platform="惠康"><td colspan="8">惠康 — 部分貨品只限指定分店；數量有限，售完即止。</td></tr>
+<tr data-platform="惠康" data-category="食品"><td>惠康</td><td><span class="cat-pill">食品</span></td><td>筒裝珍寶藍桑子 200 克</td><td class="num">$28／件，2 件 $52</td><td>未能核實</td><td>只有惠康自身價錢</td><td>11月23日至11月26日</td><td>部分優惠不適用於惠康網店、Market Place 網店及 yuu 網購</td></tr>
+<tr data-platform="惠康" data-category="食品"><td>惠康</td><td><span class="cat-pill">食品</span></td><td>藍桑子 125 克</td><td class="num">$16／件，3 件 $33</td><td>$11（萬寧）</td><td>Facebook帖文-2026/11/23</td><td>11月23日至11月26日</td><td>部分優惠不適用於惠康網店、Market Place 網店及 yuu 網購</td></tr>
+<tr data-platform="惠康" data-category="食品"><td>惠康</td><td><span class="cat-pill">食品</span></td><td>阿牧特急凍精制羊肉片 300 克</td><td class="num">$79.9／件</td><td>未能核實</td><td>只有惠康／foodpanda自身價錢</td><td>11月23日至11月26日</td><td>—</td></tr>
+<tr data-platform="惠康" data-category="食品"><td>惠康</td><td><span class="cat-pill">食品</span></td><td>思念牌小籠包 450 克</td><td class="num">$22.9／件</td><td>未能核實</td><td>只有惠康自身價錢</td><td>11月23日至11月26日</td><td>—</td></tr>
+<tr data-platform="惠康" data-category="食品"><td>惠康</td><td><span class="cat-pill">食品</span></td><td>思念豬肉灌湯小籠包 150 克 ＜豬肉／雞肉＞</td><td>$21.9／件，2 件 $20<br><small>2 件比較：未能核實</small></td><td>未能核實</td><td>只有惠康自身價錢</td><td>11月23日至11月26日</td><td>—</td></tr>
+<tr data-platform="惠康" data-category="食品"><td>惠康</td><td><span class="cat-pill">食品</span></td><td>All The Ugly Cookie 杜拜煙韌曲奇</td><td class="num">$29.9／件</td><td>未能核實</td><td>惠康獨家</td><td>11月20日至11月26日</td><td>部分貨品只限指定分店</td></tr>
+<tr data-platform="惠康" data-category="食品"><td>惠康</td><td><span class="cat-pill">食品</span></td><td>十字牌薑汁撞奶 200 毫升</td><td class="num">$8／件</td><td>$9.90（HKTVmall）</td><td>HKTVmall官方帖文-2026/11/19</td><td>11月20日至11月26日</td><td>—</td></tr>
+<tr data-platform="惠康" data-category="食品"><td>惠康</td><td><span class="cat-pill">食品</span></td><td>維記 2 粒裝雪米糍</td><td>5 件 $29.6<br><small>5 件比較：優惠總價 $29.6；參考總價 $70（惠康 $14 × 5）</small></td><td>$14／包（惠康網購，自家價）</td><td>惠康網店-2026/11/23</td><td>11月20日至11月26日</td><td>—</td></tr>
+<tr data-platform="惠康" data-category="食品"><td>惠康</td><td><span class="cat-pill">食品</span></td><td>美國佛羅里達鮮榨果汁 1.5 公升</td><td class="num">$62／盒</td><td>$63（city'super）</td><td>city'super網店-2026/11/23</td><td>11月20日至11月26日</td><td>—</td></tr>
+<tr data-platform="惠康" data-category="食品"><td>惠康</td><td><span class="cat-pill">食品</span></td><td>道地五黑生豆乳／生豆乳</td><td class="num">$8.5／支</td><td>$9（屈臣氏）</td><td>Watsons網店-2026/11/19</td><td>11月20日至11月26日</td><td>—</td></tr>
+<tr data-platform="惠康" data-category="食品"><td>惠康</td><td><span class="cat-pill">食品</span></td><td>寶礦力水特 350 毫升 8 支裝加 ASICS 聯乘運動鞋袋</td><td class="num">$44.5／件</td><td>$44.40（HKTVmall）</td><td>HKTVmall-2026/11/23</td><td>11月20日至11月26日</td><td>—</td></tr>
+<tr data-platform="惠康" data-category="食品"><td>惠康</td><td><span class="cat-pill">食品</span></td><td>阿牧特急凍精制羊肉片 300 克（foodpanda pandapro 會員）</td><td class="num">$79.9／件</td><td>未能核實</td><td>只有惠康／foodpanda自身價錢</td><td>11月20日至11月26日</td><td>只限 foodpanda 惠康 pandapro 會員</td></tr>
+<tr data-platform="惠康" data-category="食品"><td>惠康</td><td><span class="cat-pill">食品</span></td><td>日本北海道急凍帶子 255 克（foodpanda pandapro 會員）</td><td class="num">$69／包</td><td>未能核實</td><td>只有惠康自身價錢</td><td>11月20日至11月26日</td><td>只限 foodpanda 惠康 pandapro 會員</td></tr>
+<tr data-platform="惠康" data-category="食品"><td>惠康</td><td><span class="cat-pill">食品</span></td><td>生力清啤罐裝 4 x 500 毫升（foodpanda pandapro 會員）</td><td class="num">$27／盒</td><td>未能核實</td><td>只有惠康自身價錢</td><td>11月20日至11月26日</td><td>只限 foodpanda 惠康 pandapro 會員</td></tr>
+<tr class="group" data-platform="HKTVmall"><td colspan="8">HKTVmall</td></tr>
+<tr data-platform="HKTVmall" data-category="家居"><td>HKTVmall</td><td><span class="cat-pill">家居</span></td><td>Gemini 電熱水壺（加 $185 換購，碼 GMIHK185）</td><td>加 $185 換購</td><td>$438（HKTVmall，自家標示價值）</td><td>HKTVmall-2026/11/23</td><td>至 11月30日</td><td>HKTVmall 每次付款只可用 1 個碼</td></tr>
+<tr class="group" data-platform="AEON"><td colspan="8">AEON — 部分貨品只限指定分店；數量有限，售完即止。</td></tr>
+<tr data-platform="AEON" data-category="食品"><td>AEON</td><td><span class="cat-pill">食品</span></td><td>Häagen-Dazs 加賀棒焙茶拿鐵雪糕迷你杯 110 毫升</td><td class="num">$19.5</td><td>未能核實</td><td>AEON獨家口味</td><td>11月20日至12月6日</td><td>—</td></tr>
+<tr data-platform="AEON" data-category="食品"><td>AEON</td><td><span class="cat-pill">食品</span></td><td>大拖羅三文魚壽司</td><td class="num">$89</td><td>未能核實</td><td>AEON獨家即製</td><td>11月20日至12月6日</td><td>不適用於旺角、九龍灣、大窩口、尖沙咀店及中島水產</td></tr>
+<tr data-platform="AEON" data-category="家居"><td>AEON</td><td><span class="cat-pill">家居</span></td><td>BRAUN 空氣炸鍋 HF3000</td><td class="num">$499</td><td>未能核實</td><td>範圍內平台無現價（品牌官網$648不計）</td><td>11月20日至12月6日</td><td>—</td></tr>
+<tr data-platform="AEON" data-category="家居"><td>AEON</td><td><span class="cat-pill">家居</span></td><td>TOPVALU 24 吋行李喼（備杯架及 TSA 海關鎖）</td><td class="num">$349.5</td><td>未能核實</td><td>AEON自家品牌</td><td>11月20日至12月6日</td><td>不適用於旺角、油塘、啟德及將軍澳店</td></tr>
+<tr data-platform="AEON" data-category="家居"><td>AEON</td><td><span class="cat-pill">家居</span></td><td>HÓME CÓORDY 午睡枕（內含毛氈）</td><td class="num">$99</td><td>未能核實</td><td>AEON自家品牌</td><td>11月20日至12月6日</td><td>不適用於啟德店</td></tr>
+<tr data-platform="AEON" data-category="母嬰"><td>AEON</td><td><span class="cat-pill">母嬰</span></td><td>GB POCKIT+ ALL-TERRAIN 手推車</td><td class="num">$1,599</td><td>未能核實</td><td>其他平台無相同型號</td><td>11月20日至12月6日</td><td>—</td></tr>
+<tr data-platform="AEON" data-category="食品"><td>AEON</td><td><span class="cat-pill">食品</span></td><td>美酒福車（4 支酒）</td><td>$399<br><small>店方標示總值 $575 未經核實</small></td><td>未能核實</td><td>相同組合只由AEON發售</td><td>11月20日至12月6日</td><td>福車數量有限，送完即止</td></tr>
+<tr data-platform="AEON" data-category="家居"><td>AEON</td><td><span class="cat-pill">家居</span></td><td>HÓME CÓORDY 廚具福車（2 件鍋）</td><td>$189<br><small>店方標示總值 $278.9 未經核實</small></td><td>未能核實</td><td>相同組合只由AEON發售</td><td>11月20日至12月6日</td><td>福車數量有限，送完即止</td></tr>
+<tr data-platform="AEON" data-category="家居"><td>AEON</td><td><span class="cat-pill">家居</span></td><td>Gregory 精選休閒袋指定款式</td><td class="num">6 折</td><td>未能核實</td><td>無價錢</td><td>11月20日至12月6日</td><td>—</td></tr>
+<tr class="group" data-platform="屈臣氏"><td colspan="8">屈臣氏</td></tr>
+<tr data-platform="屈臣氏" data-category="母嬰"><td>屈臣氏</td><td><span class="cat-pill">母嬰</span></td><td>荷蘭美素佳兒金裝 3 號 1200 克</td><td>$399／罐，第 2 件半價，買 2 件 $598.50<br><small>2 件比較：優惠總價 $598.50；參考總價 $840（萬寧 $420 × 2）</small></td><td>$420／罐（萬寧）</td><td>Mannings網店-2026/11/24</td><td>11月13日至11月26日</td><td>適用於屈臣氏網店及門市；不包括初生嬰兒配方奶粉</td></tr>
+<tr data-platform="屈臣氏" data-category="個人護理"><td>屈臣氏</td><td><span class="cat-pill">個人護理</span></td><td>ATORREGE AD+ 深層保濕精華 30ml</td><td class="num">$290</td><td>$312（萬寧）</td><td>Mannings網店-2026/11/24</td><td>11月13日至12月3日</td><td>只限屈臣氏網店</td></tr>
+<tr data-platform="屈臣氏" data-category="個人護理"><td>屈臣氏</td><td><span class="cat-pill">個人護理</span></td><td>OLAY 胜肽專研緊緻淡紋精華輕潤霜套裝（乳霜 50g＋眼霜 5g＋精華 14ml）</td><td class="num">$319</td><td>$278（HKTVmall，平行進口）</td><td>HKTVmall-2026/11/24</td><td>11月13日至12月3日</td><td>只限屈臣氏網店</td></tr>
+<tr data-platform="屈臣氏" data-category="個人護理"><td>屈臣氏</td><td><span class="cat-pill">個人護理</span></td><td>Whisper 甜睡瞬潔 32 厘米 12 片孖裝</td><td class="num">75 折</td><td>未能核實</td><td>無價錢</td><td>11月13日至12月3日</td><td>只限屈臣氏網店</td></tr>
+<tr class="group" data-platform="759 阿信屋"><td colspan="8">759 阿信屋 — 店舖庫存各異，貨品數量有限，售完即止。</td></tr>
+<tr data-platform="759 阿信屋" data-category="食品"><td>759 阿信屋</td><td><span class="cat-pill">食品</span></td><td>OVATION 法式羊架 16 支骨 900 克以上</td><td class="num">$320</td><td>未能核實</td><td>759直送品牌</td><td>11月23日至12月6日</td><td>—</td></tr>
+<tr data-platform="759 阿信屋" data-category="食品"><td>759 阿信屋</td><td><span class="cat-pill">食品</span></td><td>OVATION 法式羊架 1000 克以上</td><td class="num">$360</td><td>未能核實</td><td>759直送品牌</td><td>11月23日至12月6日</td><td>—</td></tr>
+<tr data-platform="759 阿信屋" data-category="食品"><td>759 阿信屋</td><td><span class="cat-pill">食品</span></td><td>OVATION 法式羊架 1100 克以上</td><td class="num">$380</td><td>未能核實</td><td>759直送品牌</td><td>11月23日至12月6日</td><td>—</td></tr>
+<tr data-platform="759 阿信屋" data-category="食品"><td>759 阿信屋</td><td><span class="cat-pill">食品</span></td><td>SUPREME 無激素香雞穀飼全雞 1.0 公斤以上</td><td class="num">$43.8</td><td>未能核實</td><td>759自家品牌</td><td>11月23日至12月6日</td><td>—</td></tr>
+<tr data-platform="759 阿信屋" data-category="食品"><td>759 阿信屋</td><td><span class="cat-pill">食品</span></td><td>SUPREME 無激素香雞穀飼全雞 700 克 2 件</td><td class="num">$62.8</td><td>未能核實</td><td>759自家品牌</td><td>11月23日至12月6日</td><td>—</td></tr>
+<tr data-platform="759 阿信屋" data-category="食品"><td>759 阿信屋</td><td><span class="cat-pill">食品</span></td><td>SUPREME 法國雞肉腸原味 340 克 2 件</td><td class="num">$19.8</td><td>未能核實</td><td>759自家品牌</td><td>11月23日至12月6日</td><td>—</td></tr>
+<tr data-platform="759 阿信屋" data-category="食品"><td>759 阿信屋</td><td><span class="cat-pill">食品</span></td><td>SUPREME 法國雞肉腸芝士味 340 克 2 件</td><td class="num">$21.8</td><td>未能核實</td><td>759自家品牌</td><td>11月23日至12月6日</td><td>—</td></tr>
+<tr data-platform="759 阿信屋" data-category="食品"><td>759 阿信屋</td><td><span class="cat-pill">食品</span></td><td>759 精選日式烤雞串系列 240 克 2 件</td><td class="num">$46</td><td>未能核實</td><td>759自家精選</td><td>11月23日至12月6日</td><td>—</td></tr>
+<tr data-platform="759 阿信屋" data-category="食品"><td>759 阿信屋</td><td><span class="cat-pill">食品</span></td><td>Espana 手切 100% 伊比利亞黑毛豬火腿（風乾 24 個月）50 克</td><td class="num">$124</td><td>未能核實</td><td>759獨家品牌</td><td>11月23日至12月6日</td><td>—</td></tr>
+<tr data-platform="759 阿信屋" data-category="食品"><td>759 阿信屋</td><td><span class="cat-pill">食品</span></td><td>Espana 手切伊比利亞火腿 90 克</td><td class="num">$89</td><td>未能核實</td><td>759獨家品牌</td><td>11月23日至12月6日</td><td>—</td></tr>
+<tr data-platform="759 阿信屋" data-category="食品"><td>759 阿信屋</td><td><span class="cat-pill">食品</span></td><td>WorldFood 意式芝士雞肉薄餅 ＜芝士雞肉／烤牛肉／蘑菇芝士＞</td><td class="num">$38</td><td>未能核實</td><td>759自家品牌</td><td>11月23日至12月6日</td><td>—</td></tr>
+<tr data-platform="759 阿信屋" data-category="食品"><td>759 阿信屋</td><td><span class="cat-pill">食品</span></td><td>MALTESES 聖誕倒數日曆牛奶朱古力 108 克</td><td class="num">$32.9</td><td>未能核實</td><td>範圍內平台無相同產品</td><td>11月23日至12月6日</td><td>—</td></tr>
+<tr data-platform="759 阿信屋" data-category="食品"><td>759 阿信屋</td><td><span class="cat-pill">食品</span></td><td>Kinder 巧克力聖誕倒數日曆</td><td class="num">$58</td><td>未能核實</td><td>尺寸未能確認</td><td>11月23日至12月6日</td><td>—</td></tr>
+<tr class="group" data-platform="city'super"><td colspan="8">city'super</td></tr>
+<tr data-platform="city'super" data-category="食品"><td>city'super</td><td><span class="cat-pill">食品</span></td><td>P01 鮑魚盆菜（4 人）</td><td>$1,159.2（正價 $1,288，9 折）</td><td>未能核實</td><td>city'super獨家</td><td>11月16日至12月7日；售賣期至 12月19日中午 12 時</td><td>只限 city'super 會員；9 折未反映在網店標價內</td></tr>
+<tr data-platform="city'super" data-category="食品"><td>city'super</td><td><span class="cat-pill">食品</span></td><td>P02 鮑魚盆菜（6 人）</td><td>$1,699.2（正價 $1,888，9 折）</td><td>未能核實</td><td>city'super獨家</td><td>11月16日至12月7日；售賣期至 12月19日中午 12 時</td><td>只限 city'super 會員；9 折未反映在網店標價內</td></tr>
+<tr data-platform="city'super" data-category="食品"><td>city'super</td><td><span class="cat-pill">食品</span></td><td>P03 鮑魚盆菜（12 人）</td><td>$2,689.2（正價 $2,988，9 折）</td><td>未能核實</td><td>city'super獨家</td><td>11月16日至12月7日；售賣期至 12月19日中午 12 時</td><td>只限 city'super 會員；9 折未反映在網店標價內</td></tr>
+<tr data-platform="city'super" data-category="食品"><td>city'super</td><td><span class="cat-pill">食品</span></td><td>Foodie Wonderland Elite Feast Pass（22 張體驗券）</td><td>$399（原價 $480）</td><td>未能核實</td><td>city'super獨家</td><td>早鳥期至 11月28日下午 6 時；活動日 11月29日</td><td>只限 11月29日於 city'super 國際金融中心商場店使用；名額有限，售完即止</td></tr>
 </tbody>
 </table>
 </div>
@@ -466,6 +508,27 @@ footer.notes p { margin: 6px 0;}
 - city&#x27;super Winterfest 會員購物日：今日只限 super e-gold 會員。
 - 百佳本周精選及惠康堅著數，至 11 月 26 日。
 - 屈臣氏美素佳兒金裝 3 號第 2 件半價，至 11 月 26 日。
+
+AI推薦組合：
+每組都係同一個超市、同一張單結帳。網店限定同門市限定優惠唔可以合併，買之前睇清楚條款。
+[組合 1：萬寧「今日出位」組合]
+Aveeno 今日出位價 $99，加舒適達買 4 送煎鍋，一次過買齊浴室用品。
+- Aveeno 燕麥沐浴露 1000 毫升（任一口味） $99
+- 舒適達指定牙膏 × 4：$199.60（$49.90／支），送美亞煎鍋＋潔廁液
+合共 $298.60；參考價合共 $368.60，慳 $70.00。萬寧結帳，同一張發票。Aveeno 只限今日；舒適達至 11月26日。
+[組合 2：百佳「本周精選」食品組合]
+卡樂B、香腸、水餃都係本周精選，零食加晚餐一次買齊。
+- 卡樂B薯片 90-105 克 $42／3 包
+- 尊遜牌香腸 360 克 $100／2 包
+- 灣仔碼頭水餃家庭裝 840 克 $51／包
+合共 $193.00；參考價合共 $261.00，慳 $68.00。百佳門市或 PNS 網購，同一張單。至 11月26日。
+[組合 3：惠康「堅著數」甜品飲品組合]
+薑汁撞奶、雪米糍、豆乳、果汁都係惠康堅著數，下午茶組合。
+- 十字牌薑汁撞奶 200 毫升 $8
+- 維記 2 粒裝雪米糍 5 件 $29.6
+- 道地生豆乳 $8.5／支
+- 美國佛羅里達鮮榨果汁 1.5 公升 $62
+合共 $108.10；參考價合共 $151.90，慳 $43.80。惠康門市結帳（部分優惠唔適用於網店）。11月20日至11月26日。
 
 超市優惠：
 [萬寧]
@@ -515,74 +578,74 @@ footer.notes p { margin: 6px 0;}
 - 今日無特別優惠（感謝祭已於 11 月 22 日結束）。
 
 表格一：個別優惠
-平台｜商品｜優惠價｜參考價｜參考來源｜期間｜條款
-萬寧｜Aveeno 燕麥清新西柚沐浴露 1000 毫升 ＜清新西柚／薰衣草舒壓／（原味）／高效舒緩＞｜$99｜$169（屈臣氏） 原味：$125（HKTVmall，平行進口）｜Watsons網店-2026/11/19；原味 HKTVmall-2026/11/21｜只限 11月24日｜每人限買 24 件；優惠門店同步；不可與其他優惠同時使用
-萬寧｜Physiogel 潔美淨膠原再生精華凝膠面膜 27 克 x 4 片｜$299 買 1 送 1｜未能核實｜只有萬寧自身價錢｜11月20日至11月26日｜買 1 送 1 以價錢較低 1 件免費計
-萬寧｜Torriden 桃瑞丹 5D 微分子玻尿酸保濕面膜限量套裝（13 片 + 1 片）｜$195 買 2 送 1｜未能核實｜只有萬寧自身價錢｜11月20日至11月26日｜買 2 送 1 以價錢較低 1 件免費計
-萬寧｜舒適達指定牙膏｜買 4 件送美亞 Prestige 25 厘米易潔煎鍋 1 件及詩樂氏多效消毒潔廁液 500 毫升 1 件；買 6 件再送鴻福堂現金券 $50 2 張；滿 $399 再送萬寧 $50 電子現金券 1 張 贈品總值：未能核實｜$49.90／支（萬寧，自家價）｜萬寧網店-2026/11/23｜11月20日至11月26日｜贈品每發票計，送完即止
-百佳｜SELECT 佳之選急凍冰島有皮三文魚柳（ASC）240 克｜$48／包｜$45.90（ParknShop 網購，自家價）｜PNS網店-2026/11/23｜至 11月26日｜—
-百佳｜卡樂B薯片 90-105 克各款｜$42／3 包 3 件比較：優惠總價 $42；參考總價 $66（惠康 $22 × 3）｜$22／包（惠康）｜惠康網店-2026/11/23｜至 11月26日｜—
-百佳｜維他奶豆奶／麥精飲品 250 毫升 6 包裝各款｜$50／3 排 3 件比較：優惠總價 $50；參考總價 $60（屈臣氏 $20 × 3）｜$20／排（屈臣氏）｜Watsons網店-2026/11/21｜至 11月26日｜—
-百佳｜巴西雞中翼 2 磅裝｜$79／2 包｜未能核實｜SELECT自家品牌｜至 11月26日｜—
-百佳｜生油球急凍火雞 10–14 磅裝｜$388／件｜未能核實｜重量帶／品牌唔同｜至 11月26日｜—
-百佳｜尊遜牌香腸 360 克裝｜$100／2 包｜$72（惠康）｜惠康網店-2026/11/21｜至 11月26日｜—
-百佳｜灣仔碼頭水餃家庭裝 840 克｜$51／包｜$51.00（惠康，同優惠價一樣）｜惠康網店-2026/11/22｜至 11月26日｜—
-百佳｜富有柿（韓國）｜$12.9／3 個｜未能核實｜只有百佳自身價錢｜至 11月26日｜—
-百佳｜多菜多益水餃 8 至 20 隻裝各款｜任選 2 包 $32，易賞價會員第 3 包加 $10｜未能核實｜其他平台價錢出窗口｜至 11月26日｜—
-百佳｜維他奶山水豆漿 946 毫升｜買 2 盒送 1 盒山水鮮豆漿 236 毫升｜未能核實｜惠康優惠出窗口｜至 11月26日｜—
-百佳｜每日鮮語冷凍牛奶｜買滿 $50 減 $5｜未能核實｜品種／容量未指明，無法對應｜至 11月26日｜—
-百佳｜淳·茶舍無糖茶 250 毫升 6 包裝 1 排｜買任何產品滿 $100，加 $10 換 1 排｜$16／排（屈臣氏）｜Watsons網店-2026/11/23｜至 11月26日｜換購以每張發票計算；初生嬰兒奶粉、贈品及換購品除外
-百佳｜唯潔雅極致棉柔抽取式面紙 5 包裝 2 排｜加 $26 換 2 排 2 件比較：優惠總價 $26；參考總價 $40（屈臣氏 $20 × 2）｜$20／排（屈臣氏）｜Watsons網店-2026/11/23｜至 11月26日｜換購以每張發票計算
-百佳｜袋裝牛油果 6 個裝 1 袋｜加 $32 換 1 袋｜$42（百佳，自家價）｜PNS網店-2026/11/23｜至 11月26日｜換購以每張發票計算
-百佳｜長城牌火腿豬肉 340 克 2 罐｜加 $38 換 2 罐 2 件比較：優惠總價 $38；參考總價 $54（百佳 $27 × 2）｜$27／罐（百佳／惠康）｜惠康網店-2026/11/23｜至 11月26日｜換購以每張發票計算
-百佳｜高露潔全效專業護齦牙膏 110 克｜買 8 支送 Home Deluxe 行李箱 24 吋 1 件 贈品總值：未能核實（店方標示價值 $999 未經核實）｜未能核實｜買 8 支送贈品，無單件價｜至 11月26日｜贈品數量有限，送完即止
-百佳｜屈臣氏蒸餾水品牌常溫或冷凍飲品｜買滿 $65 送屈臣氏礦物質有氣水 6 罐裝、史雲生清雞湯（澳洲版）1 公升及淘大特級蠔油 555 克 贈品總值：未能核實｜未能核實｜滿額送禮，無單件價｜至 11月26日｜只限 PNS 網購；贈品數量有限，送完即止
-百佳｜屈臣氏蒸餾水（旗艦店）｜滿 $180 送電解質運動飲品 500 毫升 2 件；滿 $220 加送 IF 茉莉香米味椰青水 350 毫升 2 件 贈品總值：未能核實｜未能核實｜滿額送禮，無單件價｜至 11月26日｜只限 PNS 網購
-惠康｜筒裝珍寶藍桑子 200 克｜$28／件，2 件 $52｜未能核實｜只有惠康自身價錢｜11月23日至11月26日｜部分優惠不適用於惠康網店、Market Place 網店及 yuu 網購
-惠康｜藍桑子 125 克｜$16／件，3 件 $33｜$11（萬寧）｜Facebook帖文-2026/11/23｜11月23日至11月26日｜部分優惠不適用於惠康網店、Market Place 網店及 yuu 網購
-惠康｜阿牧特急凍精制羊肉片 300 克｜$79.9／件｜未能核實｜只有惠康／foodpanda自身價錢｜11月23日至11月26日｜—
-惠康｜思念牌小籠包 450 克｜$22.9／件｜未能核實｜只有惠康自身價錢｜11月23日至11月26日｜—
-惠康｜思念豬肉灌湯小籠包 150 克 ＜豬肉／雞肉＞｜$21.9／件，2 件 $20 2 件比較：未能核實｜未能核實｜只有惠康自身價錢｜11月23日至11月26日｜—
-惠康｜All The Ugly Cookie 杜拜煙韌曲奇｜$29.9／件｜未能核實｜惠康獨家｜11月20日至11月26日｜部分貨品只限指定分店
-惠康｜十字牌薑汁撞奶 200 毫升｜$8／件｜$9.90（HKTVmall）｜HKTVmall官方帖文-2026/11/19｜11月20日至11月26日｜—
-惠康｜維記 2 粒裝雪米糍｜5 件 $29.6 5 件比較：優惠總價 $29.6；參考總價 $70（惠康 $14 × 5）｜$14／包（惠康網購，自家價）｜惠康網店-2026/11/23｜11月20日至11月26日｜—
-惠康｜美國佛羅里達鮮榨果汁 1.5 公升｜$62／盒｜$63（city&#x27;super）｜city&#x27;super網店-2026/11/23｜11月20日至11月26日｜—
-惠康｜道地五黑生豆乳／生豆乳｜$8.5／支｜$9（屈臣氏）｜Watsons網店-2026/11/19｜11月20日至11月26日｜—
-惠康｜寶礦力水特 350 毫升 8 支裝加 ASICS 聯乘運動鞋袋｜$44.5／件｜$44.40（HKTVmall）｜HKTVmall-2026/11/23｜11月20日至11月26日｜—
-惠康｜阿牧特急凍精制羊肉片 300 克（foodpanda pandapro 會員）｜$79.9／件｜未能核實｜只有惠康／foodpanda自身價錢｜11月20日至11月26日｜只限 foodpanda 惠康 pandapro 會員
-惠康｜日本北海道急凍帶子 255 克（foodpanda pandapro 會員）｜$69／包｜未能核實｜只有惠康自身價錢｜11月20日至11月26日｜只限 foodpanda 惠康 pandapro 會員
-惠康｜生力清啤罐裝 4 x 500 毫升（foodpanda pandapro 會員）｜$27／盒｜未能核實｜只有惠康自身價錢｜11月20日至11月26日｜只限 foodpanda 惠康 pandapro 會員
-HKTVmall｜Gemini 電熱水壺（加 $185 換購，碼 GMIHK185）｜加 $185 換購｜$438（HKTVmall，自家標示價值）｜HKTVmall-2026/11/23｜至 11月30日｜HKTVmall 每次付款只可用 1 個碼
-AEON｜Häagen-Dazs 加賀棒焙茶拿鐵雪糕迷你杯 110 毫升｜$19.5｜未能核實｜AEON獨家口味｜11月20日至12月6日｜—
-AEON｜大拖羅三文魚壽司｜$89｜未能核實｜AEON獨家即製｜11月20日至12月6日｜不適用於旺角、九龍灣、大窩口、尖沙咀店及中島水產
-AEON｜BRAUN 空氣炸鍋 HF3000｜$499｜未能核實｜範圍內平台無現價（品牌官網$648不計）｜11月20日至12月6日｜—
-AEON｜TOPVALU 24 吋行李喼（備杯架及 TSA 海關鎖）｜$349.5｜未能核實｜AEON自家品牌｜11月20日至12月6日｜不適用於旺角、油塘、啟德及將軍澳店
-AEON｜HÓME CÓORDY 午睡枕（內含毛氈）｜$99｜未能核實｜AEON自家品牌｜11月20日至12月6日｜不適用於啟德店
-AEON｜GB POCKIT+ ALL-TERRAIN 手推車｜$1,599｜未能核實｜其他平台無相同型號｜11月20日至12月6日｜—
-AEON｜美酒福車（4 支酒）｜$399 店方標示總值 $575 未經核實｜未能核實｜相同組合只由AEON發售｜11月20日至12月6日｜福車數量有限，送完即止
-AEON｜HÓME CÓORDY 廚具福車（2 件鍋）｜$189 店方標示總值 $278.9 未經核實｜未能核實｜相同組合只由AEON發售｜11月20日至12月6日｜福車數量有限，送完即止
-AEON｜Gregory 精選休閒袋指定款式｜6 折｜未能核實｜無價錢｜11月20日至12月6日｜—
-屈臣氏｜荷蘭美素佳兒金裝 3 號 1200 克｜$399／罐，第 2 件半價，買 2 件 $598.50 2 件比較：優惠總價 $598.50；參考總價 $840（萬寧 $420 × 2）｜$420／罐（萬寧）｜Mannings網店-2026/11/24｜11月13日至11月26日｜適用於屈臣氏網店及門市；不包括初生嬰兒配方奶粉
-屈臣氏｜ATORREGE AD+ 深層保濕精華 30ml｜$290｜$312（萬寧）｜Mannings網店-2026/11/24｜11月13日至12月3日｜只限屈臣氏網店
-屈臣氏｜OLAY 胜肽專研緊緻淡紋精華輕潤霜套裝（乳霜 50g＋眼霜 5g＋精華 14ml）｜$319｜$278（HKTVmall，平行進口）｜HKTVmall-2026/11/24｜11月13日至12月3日｜只限屈臣氏網店
-屈臣氏｜Whisper 甜睡瞬潔 32 厘米 12 片孖裝｜75 折｜未能核實｜無價錢｜11月13日至12月3日｜只限屈臣氏網店
-759 阿信屋｜OVATION 法式羊架 16 支骨 900 克以上｜$320｜未能核實｜759直送品牌｜11月23日至12月6日｜—
-759 阿信屋｜OVATION 法式羊架 1000 克以上｜$360｜未能核實｜759直送品牌｜11月23日至12月6日｜—
-759 阿信屋｜OVATION 法式羊架 1100 克以上｜$380｜未能核實｜759直送品牌｜11月23日至12月6日｜—
-759 阿信屋｜SUPREME 無激素香雞穀飼全雞 1.0 公斤以上｜$43.8｜未能核實｜759自家品牌｜11月23日至12月6日｜—
-759 阿信屋｜SUPREME 無激素香雞穀飼全雞 700 克 2 件｜$62.8｜未能核實｜759自家品牌｜11月23日至12月6日｜—
-759 阿信屋｜SUPREME 法國雞肉腸原味 340 克 2 件｜$19.8｜未能核實｜759自家品牌｜11月23日至12月6日｜—
-759 阿信屋｜SUPREME 法國雞肉腸芝士味 340 克 2 件｜$21.8｜未能核實｜759自家品牌｜11月23日至12月6日｜—
-759 阿信屋｜759 精選日式烤雞串系列 240 克 2 件｜$46｜未能核實｜759自家精選｜11月23日至12月6日｜—
-759 阿信屋｜Espana 手切 100% 伊比利亞黑毛豬火腿（風乾 24 個月）50 克｜$124｜未能核實｜759獨家品牌｜11月23日至12月6日｜—
-759 阿信屋｜Espana 手切伊比利亞火腿 90 克｜$89｜未能核實｜759獨家品牌｜11月23日至12月6日｜—
-759 阿信屋｜WorldFood 意式芝士雞肉薄餅 ＜芝士雞肉／烤牛肉／蘑菇芝士＞｜$38｜未能核實｜759自家品牌｜11月23日至12月6日｜—
-759 阿信屋｜MALTESES 聖誕倒數日曆牛奶朱古力 108 克｜$32.9｜未能核實｜範圍內平台無相同產品｜11月23日至12月6日｜—
-759 阿信屋｜Kinder 巧克力聖誕倒數日曆｜$58｜未能核實｜尺寸未能確認｜11月23日至12月6日｜—
-city&#x27;super｜P01 鮑魚盆菜（4 人）｜$1,159.2（正價 $1,288，9 折）｜未能核實｜city&#x27;super獨家｜11月16日至12月7日；售賣期至 12月19日中午 12 時｜只限 city&#x27;super 會員；9 折未反映在網店標價內
-city&#x27;super｜P02 鮑魚盆菜（6 人）｜$1,699.2（正價 $1,888，9 折）｜未能核實｜city&#x27;super獨家｜11月16日至12月7日；售賣期至 12月19日中午 12 時｜只限 city&#x27;super 會員；9 折未反映在網店標價內
-city&#x27;super｜P03 鮑魚盆菜（12 人）｜$2,689.2（正價 $2,988，9 折）｜未能核實｜city&#x27;super獨家｜11月16日至12月7日；售賣期至 12月19日中午 12 時｜只限 city&#x27;super 會員；9 折未反映在網店標價內
-city&#x27;super｜Foodie Wonderland Elite Feast Pass（22 張體驗券）｜$399（原價 $480）｜未能核實｜city&#x27;super獨家｜早鳥期至 11月28日下午 6 時；活動日 11月29日｜只限 11月29日於 city&#x27;super 國際金融中心商場店使用；名額有限，售完即止
+平台｜類別｜商品｜優惠價｜參考價｜參考來源｜期間｜條款
+萬寧｜個人護理｜Aveeno 燕麥清新西柚沐浴露 1000 毫升 ＜清新西柚／薰衣草舒壓／（原味）／高效舒緩＞｜$99｜$169（屈臣氏） 原味：$125（HKTVmall，平行進口）｜Watsons網店-2026/11/19；原味 HKTVmall-2026/11/21｜只限 11月24日｜每人限買 24 件；優惠門店同步；不可與其他優惠同時使用
+萬寧｜個人護理｜Physiogel 潔美淨膠原再生精華凝膠面膜 27 克 x 4 片｜$299 買 1 送 1｜未能核實｜只有萬寧自身價錢｜11月20日至11月26日｜買 1 送 1 以價錢較低 1 件免費計
+萬寧｜個人護理｜Torriden 桃瑞丹 5D 微分子玻尿酸保濕面膜限量套裝（13 片 + 1 片）｜$195 買 2 送 1｜未能核實｜只有萬寧自身價錢｜11月20日至11月26日｜買 2 送 1 以價錢較低 1 件免費計
+萬寧｜個人護理｜舒適達指定牙膏｜買 4 件送美亞 Prestige 25 厘米易潔煎鍋 1 件及詩樂氏多效消毒潔廁液 500 毫升 1 件；買 6 件再送鴻福堂現金券 $50 2 張；滿 $399 再送萬寧 $50 電子現金券 1 張 贈品總值：未能核實｜$49.90／支（萬寧，自家價）｜萬寧網店-2026/11/23｜11月20日至11月26日｜贈品每發票計，送完即止
+百佳｜食品｜SELECT 佳之選急凍冰島有皮三文魚柳（ASC）240 克｜$48／包｜$45.90（ParknShop 網購，自家價）｜PNS網店-2026/11/23｜至 11月26日｜—
+百佳｜食品｜卡樂B薯片 90-105 克各款｜$42／3 包 3 件比較：優惠總價 $42；參考總價 $66（惠康 $22 × 3）｜$22／包（惠康）｜惠康網店-2026/11/23｜至 11月26日｜—
+百佳｜食品｜維他奶豆奶／麥精飲品 250 毫升 6 包裝各款｜$50／3 排 3 件比較：優惠總價 $50；參考總價 $60（屈臣氏 $20 × 3）｜$20／排（屈臣氏）｜Watsons網店-2026/11/21｜至 11月26日｜—
+百佳｜食品｜巴西雞中翼 2 磅裝｜$79／2 包｜未能核實｜SELECT自家品牌｜至 11月26日｜—
+百佳｜食品｜生油球急凍火雞 10–14 磅裝｜$388／件｜未能核實｜重量帶／品牌唔同｜至 11月26日｜—
+百佳｜食品｜尊遜牌香腸 360 克裝｜$100／2 包｜$72（惠康）｜惠康網店-2026/11/21｜至 11月26日｜—
+百佳｜食品｜灣仔碼頭水餃家庭裝 840 克｜$51／包｜$51.00（惠康，同優惠價一樣）｜惠康網店-2026/11/22｜至 11月26日｜—
+百佳｜食品｜富有柿（韓國）｜$12.9／3 個｜未能核實｜只有百佳自身價錢｜至 11月26日｜—
+百佳｜食品｜多菜多益水餃 8 至 20 隻裝各款｜任選 2 包 $32，易賞價會員第 3 包加 $10｜未能核實｜其他平台價錢出窗口｜至 11月26日｜—
+百佳｜食品｜維他奶山水豆漿 946 毫升｜買 2 盒送 1 盒山水鮮豆漿 236 毫升｜未能核實｜惠康優惠出窗口｜至 11月26日｜—
+百佳｜食品｜每日鮮語冷凍牛奶｜買滿 $50 減 $5｜未能核實｜品種／容量未指明，無法對應｜至 11月26日｜—
+百佳｜食品｜淳·茶舍無糖茶 250 毫升 6 包裝 1 排｜買任何產品滿 $100，加 $10 換 1 排｜$16／排（屈臣氏）｜Watsons網店-2026/11/23｜至 11月26日｜換購以每張發票計算；初生嬰兒奶粉、贈品及換購品除外
+百佳｜家居｜唯潔雅極致棉柔抽取式面紙 5 包裝 2 排｜加 $26 換 2 排 2 件比較：優惠總價 $26；參考總價 $40（屈臣氏 $20 × 2）｜$20／排（屈臣氏）｜Watsons網店-2026/11/23｜至 11月26日｜換購以每張發票計算
+百佳｜食品｜袋裝牛油果 6 個裝 1 袋｜加 $32 換 1 袋｜$42（百佳，自家價）｜PNS網店-2026/11/23｜至 11月26日｜換購以每張發票計算
+百佳｜食品｜長城牌火腿豬肉 340 克 2 罐｜加 $38 換 2 罐 2 件比較：優惠總價 $38；參考總價 $54（百佳 $27 × 2）｜$27／罐（百佳／惠康）｜惠康網店-2026/11/23｜至 11月26日｜換購以每張發票計算
+百佳｜個人護理｜高露潔全效專業護齦牙膏 110 克｜買 8 支送 Home Deluxe 行李箱 24 吋 1 件 贈品總值：未能核實（店方標示價值 $999 未經核實）｜未能核實｜買 8 支送贈品，無單件價｜至 11月26日｜贈品數量有限，送完即止
+百佳｜食品｜屈臣氏蒸餾水品牌常溫或冷凍飲品｜買滿 $65 送屈臣氏礦物質有氣水 6 罐裝、史雲生清雞湯（澳洲版）1 公升及淘大特級蠔油 555 克 贈品總值：未能核實｜未能核實｜滿額送禮，無單件價｜至 11月26日｜只限 PNS 網購；贈品數量有限，送完即止
+百佳｜食品｜屈臣氏蒸餾水（旗艦店）｜滿 $180 送電解質運動飲品 500 毫升 2 件；滿 $220 加送 IF 茉莉香米味椰青水 350 毫升 2 件 贈品總值：未能核實｜未能核實｜滿額送禮，無單件價｜至 11月26日｜只限 PNS 網購
+惠康｜食品｜筒裝珍寶藍桑子 200 克｜$28／件，2 件 $52｜未能核實｜只有惠康自身價錢｜11月23日至11月26日｜部分優惠不適用於惠康網店、Market Place 網店及 yuu 網購
+惠康｜食品｜藍桑子 125 克｜$16／件，3 件 $33｜$11（萬寧）｜Facebook帖文-2026/11/23｜11月23日至11月26日｜部分優惠不適用於惠康網店、Market Place 網店及 yuu 網購
+惠康｜食品｜阿牧特急凍精制羊肉片 300 克｜$79.9／件｜未能核實｜只有惠康／foodpanda自身價錢｜11月23日至11月26日｜—
+惠康｜食品｜思念牌小籠包 450 克｜$22.9／件｜未能核實｜只有惠康自身價錢｜11月23日至11月26日｜—
+惠康｜食品｜思念豬肉灌湯小籠包 150 克 ＜豬肉／雞肉＞｜$21.9／件，2 件 $20 2 件比較：未能核實｜未能核實｜只有惠康自身價錢｜11月23日至11月26日｜—
+惠康｜食品｜All The Ugly Cookie 杜拜煙韌曲奇｜$29.9／件｜未能核實｜惠康獨家｜11月20日至11月26日｜部分貨品只限指定分店
+惠康｜食品｜十字牌薑汁撞奶 200 毫升｜$8／件｜$9.90（HKTVmall）｜HKTVmall官方帖文-2026/11/19｜11月20日至11月26日｜—
+惠康｜食品｜維記 2 粒裝雪米糍｜5 件 $29.6 5 件比較：優惠總價 $29.6；參考總價 $70（惠康 $14 × 5）｜$14／包（惠康網購，自家價）｜惠康網店-2026/11/23｜11月20日至11月26日｜—
+惠康｜食品｜美國佛羅里達鮮榨果汁 1.5 公升｜$62／盒｜$63（city&#x27;super）｜city&#x27;super網店-2026/11/23｜11月20日至11月26日｜—
+惠康｜食品｜道地五黑生豆乳／生豆乳｜$8.5／支｜$9（屈臣氏）｜Watsons網店-2026/11/19｜11月20日至11月26日｜—
+惠康｜食品｜寶礦力水特 350 毫升 8 支裝加 ASICS 聯乘運動鞋袋｜$44.5／件｜$44.40（HKTVmall）｜HKTVmall-2026/11/23｜11月20日至11月26日｜—
+惠康｜食品｜阿牧特急凍精制羊肉片 300 克（foodpanda pandapro 會員）｜$79.9／件｜未能核實｜只有惠康／foodpanda自身價錢｜11月20日至11月26日｜只限 foodpanda 惠康 pandapro 會員
+惠康｜食品｜日本北海道急凍帶子 255 克（foodpanda pandapro 會員）｜$69／包｜未能核實｜只有惠康自身價錢｜11月20日至11月26日｜只限 foodpanda 惠康 pandapro 會員
+惠康｜食品｜生力清啤罐裝 4 x 500 毫升（foodpanda pandapro 會員）｜$27／盒｜未能核實｜只有惠康自身價錢｜11月20日至11月26日｜只限 foodpanda 惠康 pandapro 會員
+HKTVmall｜家居｜Gemini 電熱水壺（加 $185 換購，碼 GMIHK185）｜加 $185 換購｜$438（HKTVmall，自家標示價值）｜HKTVmall-2026/11/23｜至 11月30日｜HKTVmall 每次付款只可用 1 個碼
+AEON｜食品｜Häagen-Dazs 加賀棒焙茶拿鐵雪糕迷你杯 110 毫升｜$19.5｜未能核實｜AEON獨家口味｜11月20日至12月6日｜—
+AEON｜食品｜大拖羅三文魚壽司｜$89｜未能核實｜AEON獨家即製｜11月20日至12月6日｜不適用於旺角、九龍灣、大窩口、尖沙咀店及中島水產
+AEON｜家居｜BRAUN 空氣炸鍋 HF3000｜$499｜未能核實｜範圍內平台無現價（品牌官網$648不計）｜11月20日至12月6日｜—
+AEON｜家居｜TOPVALU 24 吋行李喼（備杯架及 TSA 海關鎖）｜$349.5｜未能核實｜AEON自家品牌｜11月20日至12月6日｜不適用於旺角、油塘、啟德及將軍澳店
+AEON｜家居｜HÓME CÓORDY 午睡枕（內含毛氈）｜$99｜未能核實｜AEON自家品牌｜11月20日至12月6日｜不適用於啟德店
+AEON｜母嬰｜GB POCKIT+ ALL-TERRAIN 手推車｜$1,599｜未能核實｜其他平台無相同型號｜11月20日至12月6日｜—
+AEON｜食品｜美酒福車（4 支酒）｜$399 店方標示總值 $575 未經核實｜未能核實｜相同組合只由AEON發售｜11月20日至12月6日｜福車數量有限，送完即止
+AEON｜家居｜HÓME CÓORDY 廚具福車（2 件鍋）｜$189 店方標示總值 $278.9 未經核實｜未能核實｜相同組合只由AEON發售｜11月20日至12月6日｜福車數量有限，送完即止
+AEON｜家居｜Gregory 精選休閒袋指定款式｜6 折｜未能核實｜無價錢｜11月20日至12月6日｜—
+屈臣氏｜母嬰｜荷蘭美素佳兒金裝 3 號 1200 克｜$399／罐，第 2 件半價，買 2 件 $598.50 2 件比較：優惠總價 $598.50；參考總價 $840（萬寧 $420 × 2）｜$420／罐（萬寧）｜Mannings網店-2026/11/24｜11月13日至11月26日｜適用於屈臣氏網店及門市；不包括初生嬰兒配方奶粉
+屈臣氏｜個人護理｜ATORREGE AD+ 深層保濕精華 30ml｜$290｜$312（萬寧）｜Mannings網店-2026/11/24｜11月13日至12月3日｜只限屈臣氏網店
+屈臣氏｜個人護理｜OLAY 胜肽專研緊緻淡紋精華輕潤霜套裝（乳霜 50g＋眼霜 5g＋精華 14ml）｜$319｜$278（HKTVmall，平行進口）｜HKTVmall-2026/11/24｜11月13日至12月3日｜只限屈臣氏網店
+屈臣氏｜個人護理｜Whisper 甜睡瞬潔 32 厘米 12 片孖裝｜75 折｜未能核實｜無價錢｜11月13日至12月3日｜只限屈臣氏網店
+759 阿信屋｜食品｜OVATION 法式羊架 16 支骨 900 克以上｜$320｜未能核實｜759直送品牌｜11月23日至12月6日｜—
+759 阿信屋｜食品｜OVATION 法式羊架 1000 克以上｜$360｜未能核實｜759直送品牌｜11月23日至12月6日｜—
+759 阿信屋｜食品｜OVATION 法式羊架 1100 克以上｜$380｜未能核實｜759直送品牌｜11月23日至12月6日｜—
+759 阿信屋｜食品｜SUPREME 無激素香雞穀飼全雞 1.0 公斤以上｜$43.8｜未能核實｜759自家品牌｜11月23日至12月6日｜—
+759 阿信屋｜食品｜SUPREME 無激素香雞穀飼全雞 700 克 2 件｜$62.8｜未能核實｜759自家品牌｜11月23日至12月6日｜—
+759 阿信屋｜食品｜SUPREME 法國雞肉腸原味 340 克 2 件｜$19.8｜未能核實｜759自家品牌｜11月23日至12月6日｜—
+759 阿信屋｜食品｜SUPREME 法國雞肉腸芝士味 340 克 2 件｜$21.8｜未能核實｜759自家品牌｜11月23日至12月6日｜—
+759 阿信屋｜食品｜759 精選日式烤雞串系列 240 克 2 件｜$46｜未能核實｜759自家精選｜11月23日至12月6日｜—
+759 阿信屋｜食品｜Espana 手切 100% 伊比利亞黑毛豬火腿（風乾 24 個月）50 克｜$124｜未能核實｜759獨家品牌｜11月23日至12月6日｜—
+759 阿信屋｜食品｜Espana 手切伊比利亞火腿 90 克｜$89｜未能核實｜759獨家品牌｜11月23日至12月6日｜—
+759 阿信屋｜食品｜WorldFood 意式芝士雞肉薄餅 ＜芝士雞肉／烤牛肉／蘑菇芝士＞｜$38｜未能核實｜759自家品牌｜11月23日至12月6日｜—
+759 阿信屋｜食品｜MALTESES 聖誕倒數日曆牛奶朱古力 108 克｜$32.9｜未能核實｜範圍內平台無相同產品｜11月23日至12月6日｜—
+759 阿信屋｜食品｜Kinder 巧克力聖誕倒數日曆｜$58｜未能核實｜尺寸未能確認｜11月23日至12月6日｜—
+city&#x27;super｜食品｜P01 鮑魚盆菜（4 人）｜$1,159.2（正價 $1,288，9 折）｜未能核實｜city&#x27;super獨家｜11月16日至12月7日；售賣期至 12月19日中午 12 時｜只限 city&#x27;super 會員；9 折未反映在網店標價內
+city&#x27;super｜食品｜P02 鮑魚盆菜（6 人）｜$1,699.2（正價 $1,888，9 折）｜未能核實｜city&#x27;super獨家｜11月16日至12月7日；售賣期至 12月19日中午 12 時｜只限 city&#x27;super 會員；9 折未反映在網店標價內
+city&#x27;super｜食品｜P03 鮑魚盆菜（12 人）｜$2,689.2（正價 $2,988，9 折）｜未能核實｜city&#x27;super獨家｜11月16日至12月7日；售賣期至 12月19日中午 12 時｜只限 city&#x27;super 會員；9 折未反映在網店標價內
+city&#x27;super｜食品｜Foodie Wonderland Elite Feast Pass（22 張體驗券）｜$399（原價 $480）｜未能核實｜city&#x27;super獨家｜早鳥期至 11月28日下午 6 時；活動日 11月29日｜只限 11月29日於 city&#x27;super 國際金融中心商場店使用；名額有限，售完即止
 
 價錢以門市／網店當日為準。數量有限，售完即止。</pre></div>
 </section>
@@ -1014,17 +1077,44 @@ city&#x27;super｜Foodie Wonderland Elite Feast Pass（22 張體驗券）｜$399
 })();
 </script>
 <script>
-function setOffersFilter(p){
+var offersPlatform = 'all';
+var offersCategory = 'all';
+function setOffersFilter(p){ offersPlatform = p; applyOffersFilters(); }
+function setOffersCategory(c){ offersCategory = c; applyOffersFilters(); }
+function applyOffersFilters(){
   var btns = document.querySelectorAll('#offers-filter .fbtn');
-  btns.forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.filter === p ? 'true' : 'false'); });
-  var anyRow = false;
-  document.querySelectorAll('.offers-v9 [data-platform]').forEach(function(el){
-    var show = (p === 'all' || el.dataset.platform === p);
+  btns.forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.filter === offersPlatform ? 'true' : 'false'); });
+  var cbtns = document.querySelectorAll('#offers-cat-filter .fbtn');
+  cbtns.forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.filter === offersCategory ? 'true' : 'false'); });
+  var counts = {};
+  document.querySelectorAll('.offers-v9 table tr[data-platform]:not(.group)').forEach(function(el){
+    var show = (offersPlatform === 'all' || el.dataset.platform === offersPlatform)
+      && (offersCategory === 'all' || el.dataset.category === offersCategory);
     el.style.display = show ? '' : 'none';
-    if (show && el.tagName === 'TR' && !el.classList.contains('group')) anyRow = true;
+    if (show) counts[el.dataset.platform] = (counts[el.dataset.platform] || 0) + 1;
   });
-  document.getElementById('offers-no-rows').style.display = anyRow ? 'none' : '';
-  document.getElementById('offers-filter-note').textContent = p === 'all' ? '顯示全部平台' : '只顯示：' + p;
+  document.querySelectorAll('.offers-v9 table tr.group[data-platform]').forEach(function(el){
+    var show = (offersPlatform === 'all' || el.dataset.platform === offersPlatform)
+      && (counts[el.dataset.platform] || 0) > 0;
+    el.style.display = show ? '' : 'none';
+  });
+  var anyCombo = false;
+  document.querySelectorAll('.offers-v9 .combo').forEach(function(el){
+    var show = (offersPlatform === 'all' || el.dataset.platform === offersPlatform);
+    el.style.display = show ? '' : 'none';
+    if (show) anyCombo = true;
+  });
+  document.getElementById('ai-combos').style.display = anyCombo ? '' : 'none';
+  document.querySelectorAll('.offers-v9 .mech-group').forEach(function(el){
+    el.style.display = (offersPlatform === 'all' || el.dataset.platform === offersPlatform) ? '' : 'none';
+  });
+  var total = 0;
+  Object.keys(counts).forEach(function(k){ total += counts[k]; });
+  document.getElementById('offers-no-rows').style.display = total > 0 ? 'none' : '';
+  var note = [];
+  if (offersPlatform !== 'all') note.push('超市：' + offersPlatform);
+  if (offersCategory !== 'all') note.push('類別：' + offersCategory);
+  document.getElementById('offers-filter-note').textContent = note.length ? '只顯示：' + note.join('，') : '顯示全部平台';
 }
 </script>
 </body>
